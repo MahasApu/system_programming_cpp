@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 #include "TreeNode.h"
 
 class AVL {
@@ -12,6 +13,7 @@ public:
     TreeNode* _search(TreeNode* node, int value);
     void _insert(int value);
     void _delete(int value);
+    void printTree(TreeNode* head, std::string indent, bool last, std::vector<int>& buffer);
     void printTree(TreeNode* head, std::string indent, bool last);
 
 
@@ -44,7 +46,6 @@ AVL::AVL(int values[], size_t size) {
     size = 0;
     for (size_t i = 0; i < size; i++){
         _insert(values[i]);
-        printTree(head, "", true);
     }
 }
 AVL::~AVL(){
@@ -252,6 +253,23 @@ TreeNode* AVL::delete_node(TreeNode* node, int old_value){
 
 void AVL::_delete(int value) {
     head = delete_node(head, value);
+}
+
+void AVL::printTree(TreeNode* head, std::string indent, bool last, std::vector<int>& buffer) {
+    if (head != NULL) {
+        std::cout << indent;
+        if (last) {
+        std::cout << "R----";
+        indent += "   ";
+        } else {
+        std::cout << "L----" ;
+        indent += "|  ";
+        }
+        std::cout << head->value << std::endl;
+        buffer.push_back(head->value);
+        printTree(head->left, indent, false, buffer);
+        printTree(head->right, indent, true, buffer);
+    }
 }
 
 void AVL::printTree(TreeNode* head, std::string indent, bool last) {
