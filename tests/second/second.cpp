@@ -13,6 +13,9 @@ TEST(LineTest, lineConstructors12) {
     ASSERT_TRUE(line1->get_tan() == line2->get_tan());
     ASSERT_TRUE(line1->get_bias() == line2->get_bias());
 
+    delete line1;
+    delete line2;
+
 }
 
 TEST(LineTest, lineConstructors13) {
@@ -23,6 +26,9 @@ TEST(LineTest, lineConstructors13) {
     ASSERT_TRUE(line1->get_dx() == line3->get_dx());
     ASSERT_TRUE(line1->get_tan() == line3->get_tan());
     ASSERT_TRUE(line1->get_bias() == line3->get_bias());
+
+    delete line1;
+    delete line3;
 }
 
 TEST(LineTest, lineConstructors23) {
@@ -34,12 +40,16 @@ TEST(LineTest, lineConstructors23) {
     ASSERT_TRUE(line2->get_tan() == line3->get_tan());
     ASSERT_TRUE(line2->get_bias() == line3->get_bias());
 
+    delete line2;
+    delete line3;
+
 }
 
 
 TEST(LineTest, intersectionCollinear) {
     Line* line2 = new Line{Point{1, 1}, Point{2, 2}};
     ASSERT_TRUE(line2->lines_intersection(Line{Point{2, 2}, -2, 2}) == NULL);
+    delete line2;
 }
 
 TEST(LineTest, intersection) {
@@ -49,6 +59,10 @@ TEST(LineTest, intersection) {
 
     ASSERT_TRUE(actual->get_x() == expected->get_x());
     ASSERT_TRUE( actual->get_y() == expected->get_y());
+
+    delete line2;
+    delete actual;
+    delete expected;
 }
 
 TEST(LineTest, perpendicular) {
@@ -58,6 +72,10 @@ TEST(LineTest, perpendicular) {
 
     ASSERT_TRUE(actual->get_dx() == expected->get_dx());
     ASSERT_TRUE( actual->get_dy() == expected->get_dy());
+
+    delete line2;
+    delete actual;
+    delete expected;
 }
 
 int main(int argc, char **argv)
