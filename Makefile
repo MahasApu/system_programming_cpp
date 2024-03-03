@@ -10,16 +10,13 @@ UBSAN := -fsanitize=undefined
 SAN := -fsanitize=undefined,address
 TEST_FLAGS := -lgtest -lgmock -pthread
 
-# ifeq (test,$(firstword $(MAKECMDGOALS)))
-#   # use the rest as arguments for "run"
-#   TEST_NUMBER := $(word 2, $(MAKECMDGOALS))
-#   TEST_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-#   TEST_RUN := $(foreach arg, $(TEST_ARGS), $(arg).cpp)
-#   TEST_OUT := $(foreach arg, $(TEST_ARGS), $(arg).o)
-
-#   # ...and turn them into do-nothing targets
-#   $(eval $(TEST_ARGS):;@:)
-# endif
+ifeq (test,$(firstword $(MAKECMDGOALS)))
+  TEST_NUMBER := $(word 2, $(MAKECMDGOALS))
+  TEST_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  TEST_RUN := $(foreach arg, $(TEST_ARGS), $(arg).cpp)
+  TEST_OUT := $(foreach arg, $(TEST_ARGS), $(arg).o)
+  $(eval $(TEST_ARGS):;@:)
+endif
 
 use-clang: 
 	$(CXX) tasks/$(FILE).cpp -o tasks/$(FILE).out
@@ -52,5 +49,12 @@ test-2:
 	$(CXX) -c tests/second/second.cpp $(SAN) -o tests/second/second.o
 	$(CXX) tests/second/Line.o tests/second/second.o -o tests/second/result.out $(TEST_FLAGS) $(SAN)
 	./tests/second/result.out
+
+
+test:
+	echo $(TEST_NUMBER)
+	echo $(TEST_ARGS)
+	echo $(TEST_OUT)
+
 
 clean:

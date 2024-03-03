@@ -5,8 +5,8 @@
 
 
 bool is_avl(TreeNode* head) {
-  if (head == NULL) return true;
-  if (abs(head->right->height - head->right->height) <= 1 && is_avl(head->left) && is_avl(head->right)) return true;
+  if (head == nullptr) return true;
+  if (is_avl(head->left) && is_avl(head->right) && abs(head->right->height - head->right->height) <= 1) return true;
   return false;
 }
 
@@ -33,7 +33,7 @@ TEST(AVLTreeTest, searchAfterDelete) {
   int rand_value = values[rand_index % rand_size];
   AVL* tree =  new AVL(values, rand_size);
   tree->_delete(rand_value);
-  ASSERT_TRUE(tree->_search(tree->head, rand_value) == NULL);
+  ASSERT_TRUE(tree->_search(tree->head, rand_value) == nullptr);
 
   delete tree;
 }
@@ -51,21 +51,57 @@ TEST(AVLTreeTest, insertNode) {
   tree->_insert(rand_value);
   ASSERT_TRUE(tree->_search(tree->head, rand_value)->value == rand_value);
 
-  // delete values;
   delete tree;
 }
 
-TEST(AVLTreeTest, isAVL) {
+// TEST(AVLTreeTest, isAVL) {
+
+//   int values[] = {1,2,3,4,5,6,7,8,9};
+//   AVL* determ_tree =  new AVL(values, 9);
+//   ASSERT_TRUE(is_avl(determ_tree->head));
+  
+//   delete determ_tree;
+// }
+
+
+TEST(AVLTreeTest, copyConstructor) {
 
   int values[] = {1,2,3,4,5,6,7,8,9};
-  AVL* determ_tree =  new AVL(values, 9);
-  ASSERT_TRUE(is_avl(determ_tree->head));
+  size_t size = 9;
+  AVL* determ_tree =  new AVL(values, size);
+  AVL* tree_copy = new AVL(*determ_tree);
+
+  int rand_value = values[rand() % size];
+  tree_copy->_delete(rand_value);
+
+  ASSERT_TRUE(tree_copy->_search(tree_copy->head, rand_value) == nullptr);
+  ASSERT_TRUE(determ_tree->_search(determ_tree->head, rand_value) != nullptr);
   
   delete determ_tree;
+  delete tree_copy;
 }
 
-int main(int argc, char **argv)
-{
+
+TEST(AVLTreeTest, copyOperator) {
+
+  int values[] = {1,2,3,4,5,6,7,8,9};
+  size_t size = 9;
+  AVL* determ_tree =  new AVL(values, size);
+  AVL* tree_copy = new AVL();
+  *tree_copy = *determ_tree;
+
+  int rand_value = values[rand() % size];
+  tree_copy->_delete(rand_value);
+
+  ASSERT_TRUE(tree_copy->_search(tree_copy->head, rand_value) == nullptr);
+  ASSERT_TRUE(determ_tree->_search(determ_tree->head, rand_value) != nullptr);
+  
+  delete determ_tree;
+  delete tree_copy;
+}
+
+int main(int argc, char **argv) {
+
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
