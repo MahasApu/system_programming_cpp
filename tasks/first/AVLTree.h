@@ -9,7 +9,9 @@ public:
     int size;
     AVL();
     AVL(int values[], size_t size);
+    AVL(const AVL& other);
     ~AVL();
+    AVL& operator=(const AVL& other);
     TreeNode* _search(TreeNode* node, int value);
     void _insert(int value);
     void _delete(int value);
@@ -18,6 +20,7 @@ public:
 
 
 private:
+    void copyAVL(TreeNode* node);
     void destructAVL(TreeNode*& node);
     int get_height(TreeNode* node);
     int get_balance(TreeNode* node);

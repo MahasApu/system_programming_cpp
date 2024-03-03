@@ -10,9 +10,29 @@ AVL::AVL(): head(nullptr),
 AVL::AVL(int values[], size_t size):
             head(nullptr), 
             size(0)
-            {for (size_t i = 0; i < this->size; i++){
-                _insert(values[i]);}
+            {for (size_t i = 0; i < size; i++){_insert(values[i]);}
 }
+
+AVL::AVL(const AVL& other): 
+            head(nullptr),
+            size(0) 
+            {copyAVL(other.head);}
+
+AVL& AVL::operator=(const AVL& other){
+    destructAVL(this->head);
+    copyAVL(other.head);
+    return *this;
+}
+
+void AVL::copyAVL(TreeNode* node){
+
+    if (node != nullptr){
+        _insert(node->value);
+        copyAVL(node->left);
+        copyAVL(node->right);
+    }
+}
+
 AVL::~AVL(){
     destructAVL(this->head);
 }
@@ -22,7 +42,7 @@ void AVL::destructAVL(TreeNode*& node) {
         destructAVL(node->left);
         destructAVL(node->right);
         delete node;
-        node = nullptr;
+        node = nullptr;  
     }
 }
 
@@ -238,6 +258,7 @@ void AVL::printTree(TreeNode* head, std::string indent, bool last, std::vector<i
 }
 
 void AVL::printTree(TreeNode* head, std::string indent, bool last) {
+    
     if (head != nullptr) {
         std::cout << indent;
         if (last) {
