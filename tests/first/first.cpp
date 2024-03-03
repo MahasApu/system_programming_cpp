@@ -3,10 +3,14 @@
 #include <bits/stdc++.h>
 #include "/mnt/c/Users/vaskm/OneDrive/Рабочий стол/2024/system_programming_cpp/tasks/first/AVLTree.h"
 
+int get_height(TreeNode* node) {
+    if (node == nullptr){ return 0; }
+    return node->height;
+}
 
 bool is_avl(TreeNode* head) {
   if (head == nullptr) return true;
-  if (is_avl(head->left) && is_avl(head->right) && abs(head->right->height - head->right->height) <= 1) return true;
+  if (abs(get_height(head->right) - get_height(head->left)) <= 1 && is_avl(head->left) && is_avl(head->right) ) return true;
   return false;
 }
 
@@ -54,14 +58,14 @@ TEST(AVLTreeTest, insertNode) {
   delete tree;
 }
 
-// TEST(AVLTreeTest, isAVL) {
+TEST(AVLTreeTest, isAVL) {
 
-//   int values[] = {1,2,3,4,5,6,7,8,9};
-//   AVL* determ_tree =  new AVL(values, 9);
-//   ASSERT_TRUE(is_avl(determ_tree->head));
+  int values[] = {1,2,3,4,5,6,7,8,9};
+  AVL* determ_tree =  new AVL(values, 9);
+  ASSERT_TRUE(is_avl(determ_tree->head));
   
-//   delete determ_tree;
-// }
+  delete determ_tree;
+}
 
 
 TEST(AVLTreeTest, copyConstructor) {
