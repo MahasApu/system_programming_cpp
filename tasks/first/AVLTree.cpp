@@ -1,6 +1,6 @@
 #include "AVLTree.h"
 
-int max(int a, int b) {12qaw
+int max(int a, int b) {
   return (a > b) ? a : b;
 }
 
