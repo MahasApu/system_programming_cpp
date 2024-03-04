@@ -1,6 +1,6 @@
 #include "AVLTree.h"
 
-int max(int a, int b) {
+int max(int a, int b) {12qaw
   return (a > b) ? a : b;
 }
 
@@ -19,8 +19,10 @@ AVL::AVL(const AVL& other):
             {copyAVL(other.head);}
 
 AVL& AVL::operator=(const AVL& other){
-    destructAVL(this->head);
-    copyAVL(other.head);
+    if (this != &other){
+        destructAVL(this->head);
+        copyAVL(other.head);
+    }
     return *this;
 }
 

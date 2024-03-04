@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+.vscode/settings.json
+.vs/system_programming_cpp/v17/ipch/AutoPCH/b44d468633d5819/1.ipch
+.vs/system_programming_cpp/v17/DocumentLayout.json
+.vs/system_programming_cpp/v17/Browse.VC.db
+.vs/system_programming_cpp/FileContentIndex/c46bad33-dd9a-4973-89f3-ae3b3b5f722f.vsidx
+.vs/system_programming_cpp/v17/.wsuo
+.vs/system_programming_cpp/FileContentIndex/0433c525-2d78-44c4-a3a1-50eec687e0e0.vsidx
+.vs/VSWorkspaceState.json
+.vs/tasks.vs.json
+.vs/slnx.sqlite
+.vs/ProjectSettings.json
+.vscode/launch.json
