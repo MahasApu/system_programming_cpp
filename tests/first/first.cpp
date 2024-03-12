@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <bits/stdc++.h>
-#include "/mnt/c/Users/vaskm/OneDrive/Рабочий стол/2024/system_programming_cpp/tasks/first/AVLTree.h"
+#include "../../tasks/first/AVLTree.h"
 
 int get_height(TreeNode* node) {
     if (node == nullptr){ return 0; }
@@ -37,7 +37,7 @@ TEST(AVLTreeTest, searchAfterDelete) {
   int rand_value = values[rand_index % rand_size];
   AVL* tree =  new AVL(values, rand_size);
   tree->_delete(rand_value);
-  ASSERT_TRUE(tree->_search(tree->head, rand_value) == nullptr);
+  ASSERT_TRUE(tree->_search(rand_value) == nullptr);
 
   delete tree;
 }
@@ -53,7 +53,7 @@ TEST(AVLTreeTest, insertNode) {
   int rand_value = rand() % 10000;
   AVL* tree =  new AVL(values, rand_size);
   tree->_insert(rand_value);
-  ASSERT_TRUE(tree->_search(tree->head, rand_value)->value == rand_value);
+  ASSERT_TRUE(tree->_search(rand_value)->value == rand_value);
 
   delete tree;
 }
@@ -78,8 +78,8 @@ TEST(AVLTreeTest, copyConstructor) {
   int rand_value = values[rand() % size];
   tree_copy->_delete(rand_value);
 
-  ASSERT_TRUE(tree_copy->_search(tree_copy->head, rand_value) == nullptr);
-  ASSERT_TRUE(determ_tree->_search(determ_tree->head, rand_value) != nullptr);
+  ASSERT_TRUE(tree_copy->_search(rand_value) == nullptr);
+  ASSERT_TRUE(determ_tree->_search(rand_value) != nullptr);
   
   delete determ_tree;
   delete tree_copy;
@@ -97,8 +97,8 @@ TEST(AVLTreeTest, copyOperator) {
   int rand_value = values[rand() % size];
   tree_copy->_delete(rand_value);
 
-  ASSERT_TRUE(tree_copy->_search(tree_copy->head, rand_value) == nullptr);
-  ASSERT_TRUE(determ_tree->_search(determ_tree->head, rand_value) != nullptr);
+  ASSERT_TRUE(tree_copy->_search(rand_value) == nullptr);
+  ASSERT_TRUE(determ_tree->_search(rand_value) != nullptr);
   
   delete determ_tree;
   delete tree_copy;

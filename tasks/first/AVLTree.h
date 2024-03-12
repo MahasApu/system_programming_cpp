@@ -5,14 +5,16 @@
 
 class AVL {
 public:
-    TreeNode* head;
-    int size;
     AVL();
     AVL(int values[], size_t size);
     AVL(const AVL& other);
-    ~AVL();
     AVL& operator=(const AVL& other);
-    TreeNode* _search(TreeNode* node, int value);
+    ~AVL();
+
+    TreeNode* head;
+    int size;
+
+    TreeNode* _search(int value);
     void _insert(int value);
     void _delete(int value);
     void printTree(TreeNode* head, std::string indent, bool last, std::vector<int>& buffer);
@@ -32,6 +34,7 @@ private:
     TreeNode* right_rotation(TreeNode* node);
     int comparator_balance(TreeNode* node);
     int comparator_value(TreeNode* node, int new_value);
+    TreeNode* search_node(TreeNode* node, int value);
     TreeNode* insert_node(TreeNode* node, int new_value);
     TreeNode* delete_node(TreeNode* node, int old_value);
 };

@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 #include <bits/stdc++.h>
 #include "/mnt/c/Users/vaskm/OneDrive/Рабочий стол/2024/system_programming_cpp/tasks/second/Line.h"
+#include <boost/function.hpp>
 
 
 TEST(LineTest, lineConstructors12) {
@@ -42,13 +43,12 @@ TEST(LineTest, lineConstructors23) {
 
     delete line2;
     delete line3;
-
 }
 
 
 TEST(LineTest, intersectionCollinear) {
     Line* line2 = new Line{Point{1, 1}, Point{2, 2}};
-    ASSERT_TRUE(line2->lines_intersection(Line{Point{2, 2}, -2, 2}) == NULL);
+    ASSERT_TRUE(line2->lines_intersection(Line{Point{2, 2}, -2, 2}) == nullptr);
     delete line2;
 }
 

@@ -9,8 +9,8 @@ public:
     int rank;
     int value;
 
-    TreeNode(int val): left(NULL), 
-                       right(NULL),
+    TreeNode(int val): left(nullptr), 
+                       right(nullptr),
                        height(1),
                        rank(0),
                        value(val) {}

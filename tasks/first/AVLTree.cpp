@@ -135,15 +135,19 @@ int AVL::comparator_value(TreeNode* node, int new_value) {
     else return 0;
 }
 
-TreeNode* AVL::_search(TreeNode* node, int value) {
+TreeNode* AVL::_search(int value){
+    return search_node(head, value);
+}
+
+TreeNode* AVL::search_node(TreeNode* node, int value) {
     if (node != nullptr) {
         if (node->value == value) {
             return node;
         } else {
             if (value > node->value && node->right != nullptr) {
-                return _search(node->right, value);
+                return search_node(node->right, value);
             } else if (value < node->value && node->left != nullptr) {
-                return _search(node->left, value);
+                return search_node(node->left, value);
             }
         }
     }

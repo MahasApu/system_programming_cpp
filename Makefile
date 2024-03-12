@@ -42,14 +42,15 @@ test-1:
 	$(CXX) -c tasks/first/AVLTree.cpp  $(SAN) -o tests/first/AVLTree.o 
 	$(CXX) -c tests/first/first.cpp $(SAN) -o tests/first/first.o
 	$(CXX) tests/first/AVLTree.o tests/first/first.o -o tests/first/result.out $(TEST_FLAGS) $(SAN)
-	./tests/first/result.out
+	rm tests/first/*.o
+	./tests/first/result.out 
 
 test-2:
 	$(CXX) -c tasks/second/Line.cpp  $(SAN) -o tests/second/Line.o 
 	$(CXX) -c tests/second/second.cpp $(SAN) -o tests/second/second.o
 	$(CXX) tests/second/Line.o tests/second/second.o -o tests/second/result.out $(TEST_FLAGS) $(SAN)
+	rm tests/second/*.o
 	./tests/second/result.out
-
 
 test:
 	echo $(TEST_NUMBER)
