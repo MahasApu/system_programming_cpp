@@ -1,5 +1,35 @@
 #include "AVLTree.h"
 
+
+AVL::Node::Node(int val):  left(nullptr), 
+                    right(nullptr),
+                    height(1),
+                    rank(0),
+                    value(val) {}
+
+AVL::Node::Node(const Node& other):
+                    height(other.height),
+                    rank(other.rank),
+                    value(other.value) {
+    if (other.left) left = new Node(*other.left);
+    else left = nullptr;
+    if (other.right) right = new Node(*other.right);
+    else right = nullptr;
+}
+
+AVL::Node& AVL::Node::operator=(const Node& other) {
+    height = other.height;
+    rank = other.rank;
+    value = other.value;
+
+    if (other.left) left = new Node(*other.left);
+    else left = nullptr;
+    if (other.right) right = new Node(*other.right);
+    else right = nullptr;
+    
+    return *this;
+}
+
 int max(int a, int b) {
   return (a > b) ? a : b;
 }
@@ -16,18 +46,24 @@ AVL::AVL(int values[], size_t size):
 AVL::AVL(const AVL& other): 
             head(nullptr),
             size(0) 
-            {copyAVL(other.head);}
+            {
+                std::cout << "Copy cstr called" << std::endl;
+                copyAVL(other.head);}
 
-AVL& AVL::operator=(const AVL& other){
+AVL::AVL(AVL&& other) {
+    std::cout << "Move cstr called" << std::endl;
+    head = other.head;
+    other.head = nullptr;  
+}
+
+AVL& AVL::operator=(AVL other){
     if (this != &other){
-        destructAVL(this->head);
-        copyAVL(other.head);
+        std::swap(head, other.head);
     }
     return *this;
 }
 
-void AVL::copyAVL(TreeNode* node){
-
+void AVL::copyAVL(Node* node){
     if (node != nullptr){
         _insert(node->value);
         copyAVL(node->left);
@@ -39,7 +75,7 @@ AVL::~AVL(){
     destructAVL(this->head);
 }
 
-void AVL::destructAVL(TreeNode*& node) {
+void AVL::destructAVL(Node*& node) {
     if (node != nullptr) {
         destructAVL(node->left);
         destructAVL(node->right);
@@ -48,22 +84,22 @@ void AVL::destructAVL(TreeNode*& node) {
     }
 }
 
-int AVL::get_height(TreeNode* node) {
+int AVL::get_height(Node* node) {
     if (node == nullptr){ return 0; }
     return node->height;
 }
 
-int AVL::get_balance(TreeNode* node) {
+int AVL::get_balance(Node* node) {
     if (node == nullptr){ return 0; }
     return get_height(node->left) - get_height(node->right);
 }
 
-TreeNode* AVL::get_min(TreeNode* node) {
+AVL::Node* AVL::get_min(Node* node) {
     if (node == nullptr or node->left == nullptr) { return node;}
     return get_min(node->left);
 }
 
-TreeNode* AVL::get_max(TreeNode* node) {
+AVL::Node* AVL::get_max(Node* node) {
     if (node == nullptr or node->right == nullptr) { return node;}
     return get_min(node->right);
 }
@@ -77,13 +113,13 @@ int AVL::get_tree_hight() {
     return this->head->height;
 }
 
-TreeNode* AVL::left_rotation(TreeNode* node){
+AVL::Node* AVL::left_rotation(Node* node){
     if (node == nullptr){
         return nullptr;
     }
 
-    TreeNode* r_node = node->right;
-    TreeNode* tmp = r_node->left;
+    Node* r_node = node->right;
+    Node* tmp = r_node->left;
     r_node->left = node;
     node->right = tmp;
 
@@ -99,13 +135,13 @@ TreeNode* AVL::left_rotation(TreeNode* node){
     return r_node;
 }
 
-TreeNode* AVL::right_rotation(TreeNode* node){
+AVL::Node* AVL::right_rotation(Node* node){
     if (node == nullptr){
         return node;
     }
 
-    TreeNode* l_node = node->left;
-    TreeNode* tmp = l_node->right;
+    Node* l_node = node->left;
+    Node* tmp = l_node->right;
     l_node->right = node;
     node->left = tmp;
 
@@ -122,24 +158,24 @@ TreeNode* AVL::right_rotation(TreeNode* node){
     return l_node;
 }
 
-int AVL::comparator_balance(TreeNode* node) {
+int AVL::comparator_balance(Node* node) {
     int balance = get_balance(node);
     if (balance > 1) return 1;
     else if (balance < -1) return -1;
     else return 0;
 }
 
-int AVL::comparator_value(TreeNode* node, int new_value) {
+int AVL::comparator_value(Node* node, int new_value) {
     if (new_value > node->value) return -1;
     else if (new_value < node->value) return 1;
     else return 0;
 }
 
-TreeNode* AVL::_search(int value){
+AVL::Node* AVL::_search(int value){
     return search_node(head, value);
 }
 
-TreeNode* AVL::search_node(TreeNode* node, int value) {
+AVL::Node* AVL::search_node(Node* node, int value) {
     if (node != nullptr) {
         if (node->value == value) {
             return node;
@@ -154,10 +190,10 @@ TreeNode* AVL::search_node(TreeNode* node, int value) {
     return nullptr;
 }
 
-TreeNode* AVL::insert_node(TreeNode* node, int new_value) {
+AVL::Node* AVL::insert_node(Node* node, int new_value) {
     if (node == nullptr) {
         this->size++;
-        TreeNode* tmp = new TreeNode(new_value);
+        Node* tmp = new Node(new_value);
         return (tmp) ;
     } else {
         switch (comparator_value(node, new_value)) {
@@ -193,7 +229,7 @@ void AVL::_insert(int value) {
 }
 
 
-TreeNode* AVL::delete_node(TreeNode* node, int old_value){
+AVL::Node* AVL::delete_node(Node* node, int old_value){
     if (node == nullptr) return nullptr;
 
     int comp = comparator_value(node, old_value);
@@ -210,17 +246,17 @@ TreeNode* AVL::delete_node(TreeNode* node, int old_value){
 
         case 0:
             if (node->right == nullptr) {
-                TreeNode* tmp = node->left;
+                Node* tmp = node->left;
                 delete node;
                 this->size--;
                 return tmp;
             } else if (node->left == nullptr) {
-                TreeNode* tmp = node->right;
+                Node* tmp = node->right;
                 delete node;
                 this->size--;
                 return tmp;
             } else {
-                TreeNode* tmp =  get_min(node->right);
+                Node* tmp =  get_min(node->right);
                 node->value = tmp->value;
                 node->right = delete_node(node->right, node->value);
                 node->rank--;
@@ -246,7 +282,7 @@ void AVL::_delete(int value) {
     this->head = delete_node(this->head, value);
 }
 
-void AVL::printTree(TreeNode* head, std::string indent, bool last, std::vector<int>& buffer) {
+void AVL::printTree(Node* head, std::string indent, bool last, std::vector<int>& buffer) {
     if (head != nullptr) {
         std::cout << indent;
         if (last) {
@@ -254,7 +290,7 @@ void AVL::printTree(TreeNode* head, std::string indent, bool last, std::vector<i
         indent += "   ";
         } else {
         std::cout << "L----" ;
-        indent += "|  ";
+        indent += "|  "; 
         }
         std::cout << head->value << std::endl;
         buffer.push_back(head->value);
@@ -263,7 +299,7 @@ void AVL::printTree(TreeNode* head, std::string indent, bool last, std::vector<i
     }
 }
 
-void AVL::printTree(TreeNode* head, std::string indent, bool last) {
+void AVL::printTree(Node* head, std::string indent, bool last) {
     
     if (head != nullptr) {
         std::cout << indent;

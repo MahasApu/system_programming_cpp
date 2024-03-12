@@ -3,12 +3,14 @@
 #include <bits/stdc++.h>
 #include "../../tasks/first/AVLTree.h"
 
-int get_height(TreeNode* node) {
+
+
+int get_height(AVL::Node* node) {
     if (node == nullptr){ return 0; }
     return node->height;
 }
 
-bool is_avl(TreeNode* head) {
+bool is_avl(AVL::Node* head) {
   if (head == nullptr) return true;
   if (abs(get_height(head->right) - get_height(head->left)) <= 1 && is_avl(head->left) && is_avl(head->right) ) return true;
   return false;
@@ -99,6 +101,41 @@ TEST(AVLTreeTest, copyOperator) {
 
   ASSERT_TRUE(tree_copy->_search(rand_value) == nullptr);
   ASSERT_TRUE(determ_tree->_search(rand_value) != nullptr);
+  
+  delete determ_tree;
+  delete tree_copy;
+}
+
+
+TEST(AVLTreeTest, moveConstructor) {
+
+  int values[] = {1,2,3,4,5,6,7,8,9};
+  size_t size = 9;
+  AVL* determ_tree =  new AVL(values, size);
+  AVL* tree_copy = new AVL(std::move(*determ_tree));
+
+  int rand_value = values[rand() % size];
+
+  ASSERT_TRUE(tree_copy->_search(rand_value) != nullptr);
+  ASSERT_TRUE(determ_tree->head == nullptr);
+  
+  delete determ_tree;
+  delete tree_copy;
+}
+
+
+TEST(AVLTreeTest, moveOperator) {
+
+  int values[] = {1,2,3,4,5,6,7,8,9};
+  size_t size = 9;
+  AVL* determ_tree =  new AVL(values, size);
+  AVL* tree_copy = new AVL();
+  *tree_copy = std::move(*determ_tree);
+
+  int rand_value = values[rand() % size];
+
+  ASSERT_TRUE(tree_copy->_search(rand_value) != nullptr);
+  ASSERT_TRUE(determ_tree->head == nullptr);
   
   delete determ_tree;
   delete tree_copy;
