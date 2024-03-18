@@ -39,18 +39,19 @@ run-tests:
 	./tests/$(FILE).out
 
 test-1:
-	$(CXX) -c tasks/first/AVLTree.cpp  $(SAN) -o tests/first/AVLTree.o 
-	$(CXX) -c tests/first/first.cpp $(SAN) -o tests/first/first.o
-	$(CXX) tests/first/AVLTree.o tests/first/first.o -o tests/first/result.out $(TEST_FLAGS) $(SAN)
-	rm tests/first/*.o
-	./tests/first/result.out 
+	$(CXX) -c tasks/first/AVLTree.cpp  $(SAN) -o tests/first/AVLTree.o -std=c++20
+	$(CXX) -c tasks/first/Node.cpp  $(SAN) -o tests/first/Node.o -std=c++20
+	$(CXX) -c tests/first/first.cpp $(SAN) -o tests/first/first.o -std=c++20
+	$(CXX) tests/first/Node.o tests/first/AVLTree.o tests/first/first.o -o tests/first/result.out $(TEST_FLAGS) $(SAN)
+	./tests/first/result.out
+	rm tests/first/*.o tests/first/*.out
 
 test-2:
-	$(CXX) -c tasks/second/Line.cpp  $(SAN) -o tests/second/Line.o 
-	$(CXX) -c tests/second/second.cpp $(SAN) -o tests/second/second.o
+	$(CXX) -c tasks/second/Line.cpp  $(SAN) -o tests/second/Line.o -std=c++20
+	$(CXX) -c tests/second/second.cpp $(SAN) -o tests/second/second.o -std=c++20
 	$(CXX) tests/second/Line.o tests/second/second.o -o tests/second/result.out $(TEST_FLAGS) $(SAN)
-	rm tests/second/*.o
 	./tests/second/result.out
+	rm tests/second/*.o tests/second/*.out 
 
 test:
 	echo $(TEST_NUMBER)

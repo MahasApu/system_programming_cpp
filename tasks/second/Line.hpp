@@ -1,15 +1,20 @@
 #pragma once
-#include "Point.h"
+#include "Point.hpp"
 #include <iostream>
+#include <optional>
 
+
+/*
+*     y = tan * x + bias'
+*     or 
+*    -dy*y = dx*x + bias
+*/
 
 class Line {
-
-    //  y = tan * x + bias'
-    //  or 
-    // -dy*y = dx*x + bias
+    
 private:
     float dy, dx, tan, bias;
+
 public:
     Line(const Point& start, const Point& end);
     Line(const Point& point, float dy, float dx);
@@ -18,6 +23,6 @@ public:
     float get_dx();
     float get_tan();
     float get_bias();
-    Point* lines_intersection(const Line& line);
-    Line* perpendicular(const Point& point);
+    std::optional<Point> lines_intersection(const Line& line);
+    Line perpendicular(const Point& point);
 };
