@@ -47,9 +47,9 @@ private:
     static int comparator_value(Node* node, int new_value);
     static void _order_values(Node* head, std::vector<int>& buffer);
     static void _print_tree(Node* head, std::string indent, bool last);
-    Node* left_rotation(Node* node);
-    Node* right_rotation(Node* node);
-    Node* _search(Node* node, int value);
+    static Node* left_rotation(Node* node);
+    static Node* right_rotation(Node* node);
+    static Node* _search(Node* node, int value);
     Node* _insert(Node* node, int new_value);
     Node* _delete(Node* node, int old_value);
 };
