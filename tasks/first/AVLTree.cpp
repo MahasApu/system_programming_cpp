@@ -1,36 +1,7 @@
-#include "AVLTree.h"
+#include "AVLTree.hpp"
 
 
-AVL::Node::Node(int val):  left(nullptr), 
-                    right(nullptr),
-                    height(1),
-                    rank(0),
-                    value(val) {}
-
-AVL::Node::Node(const Node& other):
-                    height(other.height),
-                    rank(other.rank),
-                    value(other.value) {
-    if (other.left) left = new Node(*other.left);
-    else left = nullptr;
-    if (other.right) right = new Node(*other.right);
-    else right = nullptr;
-}
-
-AVL::Node& AVL::Node::operator=(const Node& other) {
-    height = other.height;
-    rank = other.rank;
-    value = other.value;
-
-    if (other.left) left = new Node(*other.left);
-    else left = nullptr;
-    if (other.right) right = new Node(*other.right);
-    else right = nullptr;
-    
-    return *this;
-}
-
-int max(int a, int b) {
+static int max(int a, int b) {
   return (a > b) ? a : b;
 }
 
@@ -40,18 +11,15 @@ AVL::AVL(): head(nullptr),
 AVL::AVL(int values[], size_t size):
             head(nullptr), 
             size(0)
-            {for (size_t i = 0; i < size; i++){_insert(values[i]);}
+            {for (size_t i = 0; i < size; i++){insert_node(values[i]);}
 }
 
 AVL::AVL(const AVL& other): 
             head(nullptr),
             size(0) 
-            {
-                std::cout << "Copy cstr called" << std::endl;
-                copyAVL(other.head);}
+            {copyAVL(other.head);}
 
 AVL::AVL(AVL&& other) {
-    std::cout << "Move cstr called" << std::endl;
     head = other.head;
     other.head = nullptr;  
 }
@@ -65,7 +33,7 @@ AVL& AVL::operator=(AVL other){
 
 void AVL::copyAVL(Node* node){
     if (node != nullptr){
-        _insert(node->value);
+        insert_node(node->value);
         copyAVL(node->left);
         copyAVL(node->right);
     }
@@ -82,6 +50,11 @@ void AVL::destructAVL(Node*& node) {
         delete node;
         node = nullptr;  
     }
+}
+
+
+AVL::Node* AVL::get_head() const {
+    return head; 
 }
 
 int AVL::get_height(Node* node) {
@@ -104,13 +77,13 @@ AVL::Node* AVL::get_max(Node* node) {
     return get_min(node->right);
 }
 
-int AVL::get_size() {
-    return this->size;
+int AVL::get_size() const {
+    return size;
 }
 
 int AVL::get_tree_hight() {
-    if (this->head == nullptr) { return 0;}
-    return this->head->height;
+    if (get_head() == nullptr) { return 0;}
+    return get_head()->height;
 }
 
 AVL::Node* AVL::left_rotation(Node* node){
@@ -171,37 +144,37 @@ int AVL::comparator_value(Node* node, int new_value) {
     else return 0;
 }
 
-AVL::Node* AVL::_search(int value){
-    return search_node(head, value);
+AVL::Node* AVL::search_node(int value){
+    return _search(head, value);
 }
 
-AVL::Node* AVL::search_node(Node* node, int value) {
+AVL::Node* AVL::_search(Node* node, int value) {
     if (node != nullptr) {
         if (node->value == value) {
             return node;
         } else {
             if (value > node->value && node->right != nullptr) {
-                return search_node(node->right, value);
+                return _search(node->right, value);
             } else if (value < node->value && node->left != nullptr) {
-                return search_node(node->left, value);
+                return _search(node->left, value);
             }
         }
     }
     return nullptr;
 }
 
-AVL::Node* AVL::insert_node(Node* node, int new_value) {
+AVL::Node* AVL::_insert(Node* node, int new_value) {
     if (node == nullptr) {
-        this->size++;
+        size++;
         Node* tmp = new Node(new_value);
         return (tmp) ;
     } else {
         switch (comparator_value(node, new_value)) {
             case 1:
-                node->left = insert_node(node->left, new_value);
+                node->left = _insert(node->left, new_value);
                 break;
             case -1:
-                node->right = insert_node(node->right, new_value);
+                node->right = _insert(node->right, new_value);
                 break;
         }
         node->rank += 1;
@@ -224,41 +197,41 @@ AVL::Node* AVL::insert_node(Node* node, int new_value) {
 }
 
 
-void AVL::_insert(int value) {
-    this->head = insert_node(this->head, value);
+void AVL::insert_node(int value) {
+    this->head = _insert(this->head, value);
 }
 
 
-AVL::Node* AVL::delete_node(Node* node, int old_value){
+AVL::Node* AVL::_delete(Node* node, int old_value){
     if (node == nullptr) return nullptr;
 
     int comp = comparator_value(node, old_value);
     switch (comp) {
         case 1:
             node->rank--;
-            node->left = delete_node(node->left, old_value);
+            node->left = _delete(node->left, old_value);
             break;
 
         case -1:
             node->rank--;
-            node->right = delete_node(node->right, old_value);        
+            node->right = _delete(node->right, old_value);        
             break;
 
         case 0:
             if (node->right == nullptr) {
                 Node* tmp = node->left;
                 delete node;
-                this->size--;
+                size--;
                 return tmp;
             } else if (node->left == nullptr) {
                 Node* tmp = node->right;
                 delete node;
-                this->size--;
+                size--;
                 return tmp;
             } else {
                 Node* tmp =  get_min(node->right);
                 node->value = tmp->value;
-                node->right = delete_node(node->right, node->value);
+                node->right = _delete(node->right, node->value);
                 node->rank--;
                 break;
             }
@@ -278,28 +251,27 @@ AVL::Node* AVL::delete_node(Node* node, int old_value){
     }
 }
 
-void AVL::_delete(int value) {
-    this->head = delete_node(this->head, value);
+void AVL::delete_node(int value) {
+    this->head = _delete(this->head, value);
 }
 
-void AVL::printTree(Node* head, std::string indent, bool last, std::vector<int>& buffer) {
+void AVL::get_ordered_values(std::vector<int>& buffer){
+    _order_values(head, buffer);
+}
+
+void AVL::_order_values(Node* head, std::vector<int>& buffer) {
     if (head != nullptr) {
-        std::cout << indent;
-        if (last) {
-        std::cout << "R----";
-        indent += "   ";
-        } else {
-        std::cout << "L----" ;
-        indent += "|  "; 
-        }
-        std::cout << head->value << std::endl;
         buffer.push_back(head->value);
-        printTree(head->left, indent, false, buffer);
-        printTree(head->right, indent, true, buffer);
+        _order_values(head->left, buffer);
+        _order_values(head->right, buffer);
     }
 }
 
-void AVL::printTree(Node* head, std::string indent, bool last) {
+void AVL::print_tree(std::string indent, bool last){
+    _print_tree(head, indent, last);
+}
+
+void AVL::_print_tree(Node* head, std::string indent, bool last) {
     
     if (head != nullptr) {
         std::cout << indent;
@@ -311,7 +283,7 @@ void AVL::printTree(Node* head, std::string indent, bool last) {
         indent += "|  ";
         }
         std::cout << head->value << std::endl;
-        printTree(head->left, indent, false);
-        printTree(head->right, indent, true);
+        _print_tree(head->left, indent, false);
+        _print_tree(head->right, indent, true);
     }
 }
