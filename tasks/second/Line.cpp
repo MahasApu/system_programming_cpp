@@ -1,4 +1,5 @@
 #include "Line.hpp"
+#include<limits>
 
 const double EPSILON = std::numeric_limits<double>::epsilon();
 

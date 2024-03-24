@@ -1,6 +1,5 @@
 #pragma once
 #include "Point.hpp"
-#include <iostream>
 #include <optional>
 
 
