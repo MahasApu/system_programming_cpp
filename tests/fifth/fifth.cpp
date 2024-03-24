@@ -78,7 +78,7 @@ TEST(Prohibited, moveOperator) {
 }
 
 
-TEST(Overriding, operatorsOverriding) {
+TEST(Overloading, operatorsOverloading) {
 
     ScopedPointerDeepCopy sp1{new Triple{1, 2, 3}};
     ASSERT_TRUE(sp1->first == 1);
