@@ -63,7 +63,7 @@ test-5:
 
 
 test-6:
-	$(CXX) tasks/sixth/SquareMatrix.cpp tests/sixth/sixth.cpp $(SAN) -o tests/sixth/result.out $(STD)  $(SAN)
+	$(CXX) tasks/sixth/SquareMatrix.cpp tests/sixth/sixth.cpp $(SAN) -o tests/sixth/result.out $(STD) $(TEST_FLAGS) $(SAN)
 	./tests/sixth/result.out 
 	rm tests/sixth/*.out 
 
