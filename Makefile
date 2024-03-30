@@ -62,6 +62,11 @@ test-5:
 	rm tests/fifth/*.out 
 
 
+test-6:
+	$(CXX) tasks/sixth/SquareMatrix.cpp tests/sixth/sixth.cpp $(SAN) -o tests/sixth/result.out $(STD)  $(SAN)
+	./tests/sixth/result.out 
+	rm tests/sixth/*.out 
+
 test:
 	echo $(TEST_NUMBER)
 	echo $(TEST_ARGS)
