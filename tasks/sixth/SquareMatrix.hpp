@@ -4,14 +4,16 @@
 #include <sstream>
 #include <functional>
 
+typedef std::vector<double> d_vector_t;
+
 
 class SquareMatrix {
     size_t size_ = 0;
     double elements_sum_ = 0;
-    std::vector<std::vector<double>> matrix_;
+    std::vector<d_vector_t> matrix_;
 
 public:
-    SquareMatrix(std::vector<double> diagonal);
+    SquareMatrix(d_vector_t diagonal);
     SquareMatrix(size_t size):
                         size_(size) { resize(size_); }
     SquareMatrix(const SquareMatrix& other):
@@ -29,8 +31,8 @@ public:
     }
 
     // For double indexing
-    std::vector<double>& operator[](size_t index);
-    const std::vector<double>& operator[](size_t index) const;
+    d_vector_t& operator[](size_t index);
+    const d_vector_t& operator[](size_t index) const;
 
     // Returns summ of matrix element
     explicit operator double() const; 
@@ -60,9 +62,8 @@ private:
 
     SquareMatrix matrix_mult(const SquareMatrix& other);
     void resize(size_t size);
-    void apply(double scalar, std::function<double(double, double)> func);
     void apply(const SquareMatrix& other, std::function<double(double, double)> func);
-    static double get_vector_summ(std::vector<double> vector);
+    static double get_vector_summ(d_vector_t vector);
 
     
 };

@@ -5,7 +5,7 @@
 
 
 
-SquareMatrix::SquareMatrix(std::vector<double> diagonal) {
+SquareMatrix::SquareMatrix(d_vector_t diagonal) {
     size_ = diagonal.size();
     matrix_.resize(size_);
     int counter = 0;
@@ -26,20 +26,12 @@ size_t SquareMatrix::get_size() {
     return size_;
 }
 
-double SquareMatrix::get_vector_summ(std::vector<double> vector){
+double SquareMatrix::get_vector_summ(d_vector_t vector){
     double summ = 0;
     for(double element: vector) summ += element;
     return summ;
 }
 
-
-void SquareMatrix::apply(double scalar, std::function<double(double, double)> func) {
-    for(size_t i = 0; i < size_; i++) {
-        double result = func(matrix_[i][i], scalar);
-        elements_sum_ += result - matrix_[i][i];
-        matrix_[i][i] = result;
-    }
-}
 
 void SquareMatrix::apply(const SquareMatrix& other, std::function<double(double, double)> func) {
     assert((other.size_ == this->size_) && "Sizes of matrices are not equal!");
@@ -72,8 +64,7 @@ void SquareMatrix::print_matrix() {
         std::cout << "No elements to print. Matrix is empty!" << std::endl;
         return;
     } 
-
-    for (std::vector<double> column : matrix_) {
+    for (d_vector_t column : matrix_) {
         std::ostringstream row;
         for (size_t i = 0; i < column.size(); i++){
             row << column[i] << " ";
@@ -85,8 +76,8 @@ void SquareMatrix::print_matrix() {
 
 // Returns summ of matrix elements
 SquareMatrix::operator double() const { return elements_sum_;};
-std::vector<double>& SquareMatrix::operator[](size_t index) { return matrix_[index];}
-const std::vector<double>& SquareMatrix::operator[](size_t index) const { return matrix_[index];}
+d_vector_t& SquareMatrix::operator[](size_t index) { return matrix_[index];}
+const d_vector_t& SquareMatrix::operator[](size_t index) const { return matrix_[index];}
 
 
 // Matrix operators
@@ -111,12 +102,11 @@ SquareMatrix SquareMatrix::operator-(const SquareMatrix& other){
 }
 
 SquareMatrix SquareMatrix::operator*(const SquareMatrix& other){
-    SquareMatrix new_matrix = matrix_mult(other);
-    return new_matrix;
+    return matrix_mult(other);
 }
 
 SquareMatrix& SquareMatrix::operator+=(const SquareMatrix& other){
-    apply(other, [](double a, double b){return a + b;});
+    *this = *this + other;
     return *this;
 }
 
@@ -141,32 +131,24 @@ bool SquareMatrix::operator!=(const SquareMatrix& other) const {
 
 // Scalar opeartors
 SquareMatrix SquareMatrix::operator+(const double scalar){
-    SquareMatrix new_matrix = *this;
-    new_matrix.apply(scalar, [](double a, double b){return a + b;});
-    return new_matrix;
+    return *this + d_vector_t(size_, scalar);
 }
 
 SquareMatrix SquareMatrix::operator-(const double scalar){
-    SquareMatrix new_matrix = *this;
-    new_matrix.apply(scalar, [](double a, double b){return a - b;});
-    return new_matrix;
+    return *this - d_vector_t(size_, scalar);
 }
 
 SquareMatrix SquareMatrix::operator*(const double scalar){
-    SquareMatrix new_matrix = *this;
-    std::vector<double> tmp(size_, scalar);
-    new_matrix.apply({tmp}, [](double a, double b){return a * b;} );
-    return new_matrix;
+    return *this * d_vector_t(size_, scalar);;
 }
 
 SquareMatrix& SquareMatrix::operator*=(const double scalar){
-    std::vector<double> tmp(size_, scalar);
-    apply({tmp}, [](double a, double b){return a * b;} );
+    *this = *this * d_vector_t(size_, scalar);
     return *this;
 }
 
 SquareMatrix& SquareMatrix::operator+=(const double scalar){
-    apply(scalar, [](double a, double b){return a + b;});
+    *this = *this + d_vector_t(size_, scalar);
     return *this;
 }
 
