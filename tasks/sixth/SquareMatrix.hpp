@@ -38,32 +38,32 @@ public:
     explicit operator double() const; 
 
     SquareMatrix& operator=(SquareMatrix other);
-    SquareMatrix operator+(const SquareMatrix& other);
-    SquareMatrix operator-(const SquareMatrix& other);
-    SquareMatrix operator*(const SquareMatrix& other);
+    friend SquareMatrix operator+(const SquareMatrix& first, const SquareMatrix& second);
+    friend SquareMatrix operator-(const SquareMatrix& first, const SquareMatrix& second);
+    friend SquareMatrix operator*(const SquareMatrix& first, const SquareMatrix& second);
     SquareMatrix& operator+=(const SquareMatrix& other);
     SquareMatrix& operator*=(const SquareMatrix& other);
 
-    bool operator==(const SquareMatrix& other) const;
-    bool operator!=(const SquareMatrix& other) const;
+    friend bool operator==(const SquareMatrix& first, const SquareMatrix& second);
+    friend bool operator!=(const SquareMatrix& first, const SquareMatrix& second);
 
-    SquareMatrix operator+(const double scalar);
-    SquareMatrix operator-(const double scalar);
-    SquareMatrix operator*(const double scalar);
+    friend SquareMatrix operator+(const SquareMatrix& matrix, const double scalar);
+    friend SquareMatrix operator-(const SquareMatrix& matrix, const double scalar);
+    friend SquareMatrix operator*(const SquareMatrix& matrix, const double scalar);
     SquareMatrix& operator+=(const double scalar);
     SquareMatrix& operator*=(const double scalar);
 
     ~SquareMatrix() = default;
 
-    void print_matrix();
+    friend void print_matrix(const SquareMatrix& matrix);
     size_t get_size();
 
 private:
 
-    SquareMatrix matrix_mult(const SquareMatrix& other);
     void resize(size_t size);
-    void apply(const SquareMatrix& other, std::function<double(double, double)> func);
     static double get_vector_summ(d_vector_t vector);
+    friend SquareMatrix matrix_mult(const SquareMatrix& first, const SquareMatrix& second);
+    friend SquareMatrix apply(const SquareMatrix& first, const SquareMatrix& second, std::function<double(double, double)> func);
 
     
 };
