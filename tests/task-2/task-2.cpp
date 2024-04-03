@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <bits/stdc++.h>
-#include "../../tasks/second/Line.hpp"
+#include "../../tasks/task-2/Line.hpp"
 #include <boost/function.hpp>
 
 

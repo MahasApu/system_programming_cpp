@@ -2,9 +2,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "../../tasks/fifth/Triple.hpp"
-#include "../../tasks/fifth/ScopedPointerDeepCopy.hpp"
-#include "../../tasks/fifth/ScopedPointerProhibited.hpp"
+#include "../../tasks/task-5/Triple.hpp"
+#include "../../tasks/task-5/ScopedPointerDeepCopy.hpp"
+#include "../../tasks/task-5/ScopedPointerProhibited.hpp"
 
 // First one with deep copy
 // Second one with transferring an ownership (prohibit copy cstr)

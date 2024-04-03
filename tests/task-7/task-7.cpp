@@ -1,9 +1,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "../../tasks/seventh/Binary/Add.hpp"
-#include "../../tasks/seventh/Unary/Val.hpp"
-#include "../../tasks/seventh/Unary/Var.hpp"
+#include "../../tasks/task-7/Binary/Add.hpp"
+#include "../../tasks/task-7/Unary/Val.hpp"
+#include "../../tasks/task-7/Unary/Var.hpp"
 
 
 TEST(ExpressionsInheritance, varTest) {
