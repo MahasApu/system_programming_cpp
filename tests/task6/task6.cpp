@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "../../tasks/task-6/SquareMatrix.hpp"
+#include "../../tasks/task6/SquareMatrix.hpp"
 
 
 TEST(SquareMatrix, diagConstructor) {

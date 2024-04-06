@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <bits/stdc++.h>
-#include "../../tasks/task-1/AVLTree.hpp"
+#include "../../tasks/task1/AVLTree.hpp"
 
 
 
