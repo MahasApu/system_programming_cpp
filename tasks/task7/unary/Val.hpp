@@ -1,12 +1,20 @@
 #pragma once
 
-#include "../Unary.hpp"
+#include <boost/lexical_cast.hpp>
 
-class Val: public Unary<int> {
+#include "../Expression.hpp"
+
+class Val: public Expression {
+protected:
+    int value;
 public:
-    Val(int value): Unary<int>(value) { }
-    
+    Val(int value): value(value) { }
+
     Expression* diff(std::string var) override {
         return new Val(0);
     };
+
+    std::string get_expr() override {
+        return boost::lexical_cast<std::string>(value);
+    }
 };

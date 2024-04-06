@@ -3,11 +3,10 @@
 #include <iostream>
 #include <string>
 
-
 class Expression {
-    
+protected:
 public:
-    Expression() {};
+    Expression() { }
     Expression(const Expression& other) = default;
     Expression& operator=(const Expression& other) = default;
 

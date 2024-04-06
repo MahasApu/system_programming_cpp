@@ -1,16 +1,21 @@
 #pragma once
 
-#include "../Unary.hpp"
 #include "Val.hpp"
 
-class Var: public Unary<std::string> {
+class Var: public Expression {
+    std::string var;
+
 public:
-    Var(std::string var): Unary(var) { }
-    
+    Var(std::string var): var(var) { }
+
     Expression* diff(std::string var) override {
-        if (value == var) {
+        if (this->var == var) {
             return new Val(1);
         }
         return new Val(0);
     };
+
+        std::string get_expr() override {
+            return var;
+    }
 };

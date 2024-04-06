@@ -1,20 +1,20 @@
 #pragma once
 
-#include "../Binary.hpp"
-#include "../unary/Val.hpp"
+#include "../Unary.hpp"
 #include "Mult.hpp"
 
 
-class Exponent: public Binary {
+class Exponent: public Unary {
 public:
-    Exponent(Expression* first, Val* second):
-            Binary(first, second, "^") { }
-            
-    Expression* diff(std::string) override {
-        // looks bad :(
-        Val* tmp = dynamic_cast<Val*>(second); 
-        int tmp_val = std::stoi(tmp->get_expr());
-        return new Mult(second,new Exponent(first, new Val(tmp_val - 1)));
+    Exponent(Expression* expr):
+            Unary(expr, "e^") { }
+
+    Expression* diff(std::string var) override {
+        return new Mult(expr->diff(var), this);
      }
+
+    std::string get_expr() override {
+         return _operator + expr->get_expr();
+    }
 
 };

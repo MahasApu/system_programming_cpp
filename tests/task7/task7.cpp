@@ -43,22 +43,22 @@ TEST(ExpressionsInheritance, subTest) {
 
 TEST(ExpressionsInheritance, divTestInt) {
     Expression* v = new Div(new Var("x"), new Val(10));
-    ASSERT_TRUE(v->diff("x")->get_expr() == "(1*10-x*0)/(10^2)");
+    ASSERT_TRUE(v->diff("x")->get_expr() == "(1*10-x*0)/(10*10)");
     delete v;
 }
 
 TEST(ExpressionsInheritance, divTestVar) {
     Expression* v = new Div(new Var("x"), new Var("y"));
-    ASSERT_TRUE(v->diff("x")->get_expr() == "(1*y-x*0)/(y^2)");
-    ASSERT_TRUE(v->diff("y")->get_expr() == "(0*y-x*1)/(y^2)");
+    ASSERT_TRUE(v->diff("x")->get_expr() == "(1*y-x*0)/(y*y)");
+    ASSERT_TRUE(v->diff("y")->get_expr() == "(0*y-x*1)/(y*y)");
     delete v;
 }
 
 
 TEST(ExpressionsInheritance, exponentTest) {
-    Expression* v = new Exponent(new Var("x"), new Val(3));
-    ASSERT_TRUE(v->get_expr() == "x^3");
-    ASSERT_TRUE(v->diff("x")->get_expr() == "3*x^2");
+    Expression* v = new Exponent(new Val(3));
+    ASSERT_TRUE(v->get_expr() == "e^3");
+    ASSERT_TRUE(v->diff("x")->get_expr() == "0*e^3");
     delete v;
 }
 
