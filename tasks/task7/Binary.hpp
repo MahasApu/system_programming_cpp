@@ -17,8 +17,8 @@ public:
     Binary& operator=(const Binary& other) = default;
     virtual ~Binary() {
         std::cout << "del in binary" << std::endl;
-        if (first) delete first;
-        if (second) delete second;
+        delete first;
+        delete second;
     }
 
     std::string get_symbolic() override {
