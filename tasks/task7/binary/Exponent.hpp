@@ -6,19 +6,19 @@
 
 class Exponent: public Unary {
 public:
-    Exponent(Expression* expr):
-            Unary(expr, "e^") { }
+    Exponent(Expression* _expr):
+            Unary(_expr, "e^") { }
 
     Expression* diff(std::string var) override {
-        return new Mult(expr->diff(var), this->get_copy());
+        return new Mult(_expr->diff(var), this->get_copy());
      }
 
     std::string get_symbolic() override {
-         return _operator + expr->get_symbolic();
+         return _operator + _expr->get_symbolic();
     }
 
     Expression* get_copy() override {
-        return new Exponent(expr->get_copy());
+        return new Exponent(_expr->get_copy());
     }
 
 };

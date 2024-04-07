@@ -5,14 +5,14 @@
 
 class Mult: public Binary {
 public:
-    Mult(Expression* first, Expression* second):
-            Binary(first, second, "*") { }
+    Mult(Expression* _first, Expression* _second):
+            Binary(_first, _second, "*") { }
             
     Expression* diff(std::string var) override {
-        return new Add(new Mult(first->diff(var), second->get_copy()), new Mult(first->get_copy(), second->diff(var)));
+        return new Add(new Mult(_first->diff(var), _second->get_copy()), new Mult(_first->get_copy(), _second->diff(var)));
     }
 
     Expression* get_copy() override {
-        return new Mult(first->get_copy(), second->get_copy());
+        return new Mult(_first->get_copy(), _second->get_copy());
     }
 };

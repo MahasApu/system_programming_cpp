@@ -6,10 +6,10 @@
 
 class Val: public Expression {
 protected:
-    int value;
+    int _value;
 
 public:
-    Val(int value): value(value) { }
+    Val(int _value): _value(_value) { }
     Val(const Val& other) = default;
     Val& operator=(const Val& other) = default;
     ~Val() { std::cout << "del val" << std::endl;}
@@ -19,10 +19,10 @@ public:
     };
 
     std::string get_symbolic() override {
-        return boost::lexical_cast<std::string>(value);
+        return boost::lexical_cast<std::string>(_value);
     }
 
     Expression* get_copy() override {
-        return new Val(value);
+        return new Val(_value);
     }
 };
