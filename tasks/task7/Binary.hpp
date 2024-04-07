@@ -15,13 +15,13 @@ public:
                         _operator(_operator) { }
     Binary(const Binary& other) = default;
     Binary& operator=(const Binary& other) = default;
-    ~Binary() {
+    virtual ~Binary() {
         std::cout << "del in binary" << std::endl;
-        delete first;
-        delete second;
+        if (first) delete first;
+        if (second) delete second;
     }
 
-    std::string get_expr() override {
-         return first->get_expr()  + _operator + second->get_expr(); 
+    std::string get_symbolic() override {
+         return first->get_symbolic()  + _operator + second->get_symbolic(); 
     }
 };

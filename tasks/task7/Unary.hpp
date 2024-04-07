@@ -15,6 +15,8 @@ public:
                                  _operator(_operator) { }
     Unary(const Unary& other) = default;
     Unary& operator=(const Unary& other) = default;
-    ~Unary() { std::cout << "del in unary" << std::endl; }
-
+    ~Unary() { 
+        std::cout << "del in unary" << std::endl; 
+        delete expr;
+    }
 };

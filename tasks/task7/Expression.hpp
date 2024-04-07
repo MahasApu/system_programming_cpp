@@ -12,6 +12,7 @@ public:
 
     virtual ~Expression() { };
     virtual Expression* diff(std::string var) = 0;
-    virtual std::string get_expr() = 0;
+    virtual std::string get_symbolic() = 0;
+    virtual Expression* get_copy() = 0;
 };
 

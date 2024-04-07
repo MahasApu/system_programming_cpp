@@ -10,11 +10,15 @@ public:
             Unary(expr, "e^") { }
 
     Expression* diff(std::string var) override {
-        return new Mult(expr->diff(var), this);
+        return new Mult(expr->diff(var), this->get_copy());
      }
 
-    std::string get_expr() override {
-         return _operator + expr->get_expr();
+    std::string get_symbolic() override {
+         return _operator + expr->get_symbolic();
+    }
+
+    Expression* get_copy() override {
+        return new Exponent(expr->get_copy());
     }
 
 };

@@ -9,7 +9,10 @@ public:
             Binary(first, second, "*") { }
             
     Expression* diff(std::string var) override {
-        return new Add(new Mult(first->diff(var), second), new Mult(first, second->diff(var)));
+        return new Add(new Mult(first->diff(var), second->get_copy()), new Mult(first->get_copy(), second->diff(var)));
     }
 
+    Expression* get_copy() override {
+        return new Mult(first->get_copy(), second->get_copy());
+    }
 };

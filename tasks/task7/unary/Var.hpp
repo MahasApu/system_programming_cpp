@@ -7,6 +7,10 @@ class Var: public Expression {
 
 public:
     Var(std::string var): var(var) { }
+    Var(const Var& other) = default;
+    Var& operator=(const Var& other) = default;
+
+    ~Var() { std::cout << "del var" << std::endl; }
 
     Expression* diff(std::string var) override {
         if (this->var == var) {
@@ -15,7 +19,11 @@ public:
         return new Val(0);
     };
 
-        std::string get_expr() override {
-            return var;
+    std::string get_symbolic() override {
+        return var;
+    }
+
+    Expression* get_copy() override {
+        return new Var(var);
     }
 };
