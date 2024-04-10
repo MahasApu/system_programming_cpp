@@ -8,11 +8,14 @@ public:
     Mult(Expression* _first, Expression* _second):
             Binary(_first, _second, "*") { }
             
+    Mult(const Mult& other):
+        Binary(other._first->clone(), other._second->clone(), "*") { }
+            
     Expression* diff(std::string var) override {
-        return new Add(new Mult(_first->diff(var), _second->get_copy()), new Mult(_first->get_copy(), _second->diff(var)));
+        return new Add(new Mult(_first->diff(var), _second->clone()), new Mult(_first->clone(), _second->diff(var)));
     }
 
-    Expression* get_copy() override {
-        return new Mult(_first->get_copy(), _second->get_copy());
+    Expression* clone() override {
+        return new Mult(*this);
     }
 };

@@ -7,8 +7,7 @@ class Var: public Expression {
 
 public:
     Var(std::string var): _variable(var) { }
-    Var(const Var& other) = default;
-    Var& operator=(const Var& other) = default;
+    Var(const Var& other): _variable(other._variable) { }
 
     ~Var() { std::cout << "del var" << std::endl; }
 
@@ -19,11 +18,11 @@ public:
         return new Val(0);
     };
 
-    std::string get_symbolic() override {
+    std::string symbolic() override {
         return _variable;
     }
 
-    Expression* get_copy() override {
-        return new Var(_variable);
+    Expression* clone() override {
+        return new Var(*this);
     }
 };

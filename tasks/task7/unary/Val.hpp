@@ -5,24 +5,23 @@
 #include "../Expression.hpp"
 
 class Val: public Expression {
-protected:
     int _value;
 
 public:
     Val(int _value): _value(_value) { }
-    Val(const Val& other) = default;
-    Val& operator=(const Val& other) = default;
+    Val(const Val& other): _value(other._value) { }
+
     ~Val() { std::cout << "del val" << std::endl;}
 
     Expression* diff(std::string var) override {
         return new Val(0);
     };
 
-    std::string get_symbolic() override {
+    std::string symbolic() override {
         return boost::lexical_cast<std::string>(_value);
     }
 
-    Expression* get_copy() override {
-        return new Val(_value);
+    Expression* clone() override {
+        return new Val(*this);
     }
 };
