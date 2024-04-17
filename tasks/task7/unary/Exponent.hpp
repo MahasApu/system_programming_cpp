@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Unary.hpp"
-#include "Mult.hpp"
+#include "../binary/Mult.hpp"
 
 
 class Exponent: public Unary {

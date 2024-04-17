@@ -3,11 +3,11 @@
 
 #include "../../tasks/task7/binary/Add.hpp"
 #include "../../tasks/task7/binary/Sub.hpp"
-#include "../../tasks/task7/binary/Exponent.hpp"
+#include "../../tasks/task7/unary/Exponent.hpp"
 #include "../../tasks/task7/binary/Mult.hpp"
 #include "../../tasks/task7/binary/Div.hpp"
-#include "../../tasks/task7/unary/Val.hpp"
-#include "../../tasks/task7/unary/Var.hpp"
+#include "../../tasks/task7/Val.hpp"
+#include "../../tasks/task7/Var.hpp"
 #include "../../tasks/task7/ScopedExpression.hpp"
 
 

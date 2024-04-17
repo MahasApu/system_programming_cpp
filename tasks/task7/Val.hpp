@@ -2,7 +2,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include "../Expression.hpp"
+#include "Expression.hpp"
 
 class Val: public Expression {
     int _value;
