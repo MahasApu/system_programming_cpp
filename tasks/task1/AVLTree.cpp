@@ -5,33 +5,39 @@ static int max(int a, int b) {
   return (a > b) ? a : b;
 }
 
-AVL::AVL(): head(nullptr), 
+template<typename T>
+AVL<T>::AVL(): head(nullptr), 
             size(0) {}
 
-AVL::AVL(int values[], size_t size):
+template<typename T>
+AVL<T>::AVL(T values[], size_t size):
             head(nullptr), 
             size(0)
             {for (size_t i = 0; i < size; i++){insert_node(values[i]);}
 }
 
-AVL::AVL(const AVL& other): 
+template<typename T>
+AVL<T>::AVL(const AVL& other): 
             head(nullptr),
             size(0) 
             {copyAVL(other.head);}
 
-AVL::AVL(AVL&& other) {
+template<typename T>
+AVL<T>::AVL(AVL<T>&& other) {
     head = other.head;
     other.head = nullptr;  
 }
 
-AVL& AVL::operator=(AVL other){
+template<typename T>
+AVL<T>& AVL<T>::operator=(AVL other){
     if (this != &other){
         std::swap(head, other.head);
     }
     return *this;
 }
 
-void AVL::copyAVL(Node* node){
+template<typename T>
+void AVL<T>::copyAVL(Node* node){
     if (node != nullptr){
         insert_node(node->value);
         copyAVL(node->left);
@@ -39,11 +45,13 @@ void AVL::copyAVL(Node* node){
     }
 }
 
-AVL::~AVL(){
+template<typename T>
+AVL<T>::~AVL(){
     destructAVL(this->head);
 }
 
-void AVL::destructAVL(Node*& node) {
+template<typename T>
+void AVL<T>::destructAVL(Node*& node) {
     if (node != nullptr) {
         destructAVL(node->left);
         destructAVL(node->right);
@@ -52,41 +60,48 @@ void AVL::destructAVL(Node*& node) {
     }
 }
 
-
-AVL::Node* AVL::get_head() const {
+template<typename T>
+typename AVL<T>::Node* AVL<T>::get_head() const {
     return head; 
 }
 
-int AVL::get_height(Node* node) {
+template<typename T>
+int AVL<T>::get_height(Node* node) {
     if (node == nullptr){ return 0; }
     return node->height;
 }
 
-int AVL::get_balance(Node* node) {
+template<typename T>
+int AVL<T>::get_balance(Node* node) {
     if (node == nullptr){ return 0; }
     return get_height(node->left) - get_height(node->right);
 }
 
-AVL::Node* AVL::get_min(Node* node) {
+template<typename T>
+typename AVL<T>::Node* AVL<T>::get_min(Node* node) {
     if (node == nullptr or node->left == nullptr) { return node;}
     return get_min(node->left);
 }
 
-AVL::Node* AVL::get_max(Node* node) {
+template<typename T>
+typename AVL<T>::Node* AVL<T>::get_max(Node* node) {
     if (node == nullptr or node->right == nullptr) { return node;}
     return get_min(node->right);
 }
 
-int AVL::get_size() const {
+template<typename T>
+int AVL<T>::get_size() const {
     return size;
 }
 
-int AVL::get_tree_hight() {
+template<typename T>
+int AVL<T>::get_tree_hight() {
     if (get_head() == nullptr) { return 0;}
     return get_head()->height;
 }
 
-AVL::Node* AVL::left_rotation(Node* node){
+template<typename T>
+typename AVL<T>::Node* AVL<T>::left_rotation(Node* node){
     if (node == nullptr){
         return nullptr;
     }
@@ -108,7 +123,8 @@ AVL::Node* AVL::left_rotation(Node* node){
     return r_node;
 }
 
-AVL::Node* AVL::right_rotation(Node* node){
+template<typename T>
+typename AVL<T>::Node* AVL<T>::right_rotation(Node* node){
     if (node == nullptr){
         return node;
     }
@@ -131,24 +147,28 @@ AVL::Node* AVL::right_rotation(Node* node){
     return l_node;
 }
 
-int AVL::comparator_balance(Node* node) {
+template<typename T>
+int AVL<T>::comparator_balance(Node* node) {
     int balance = get_balance(node);
     if (balance > 1) return 1;
     else if (balance < -1) return -1;
     else return 0;
 }
 
-int AVL::comparator_value(Node* node, int new_value) {
+template<typename T>
+int AVL<T>::comparator_value(Node* node, T new_value) {
     if (new_value > node->value) return -1;
     else if (new_value < node->value) return 1;
     else return 0;
 }
 
-AVL::Node* AVL::search_node(int value){
+template<typename T>
+typename AVL<T>::Node* AVL<T>::search_node(T value){
     return _search(head, value);
 }
 
-AVL::Node* AVL::_search(Node* node, int value) {
+template<typename T>
+typename AVL<T>::Node* AVL<T>::_search(Node* node, T value) {
     if (node != nullptr) {
         if (node->value == value) {
             return node;
@@ -163,7 +183,8 @@ AVL::Node* AVL::_search(Node* node, int value) {
     return nullptr;
 }
 
-AVL::Node* AVL::_insert(Node* node, int new_value) {
+template<typename T>
+typename AVL<T>::Node* AVL<T>::_insert(Node* node, T new_value) {
     if (node == nullptr) {
         size++;
         Node* tmp = new Node(new_value);
@@ -196,13 +217,13 @@ AVL::Node* AVL::_insert(Node* node, int new_value) {
     }
 }
 
-
-void AVL::insert_node(int value) {
+template<typename T>
+void AVL<T>::insert_node(T value) {
     this->head = _insert(this->head, value);
 }
 
-
-AVL::Node* AVL::_delete(Node* node, int old_value){
+template<typename T>
+typename AVL<T>::Node* AVL<T>::_delete(Node* node, T old_value){
     if (node == nullptr) return nullptr;
 
     int comp = comparator_value(node, old_value);
@@ -251,15 +272,18 @@ AVL::Node* AVL::_delete(Node* node, int old_value){
     }
 }
 
-void AVL::delete_node(int value) {
+template<typename T>
+void AVL<T>::delete_node(T value) {
     this->head = _delete(this->head, value);
 }
 
-void AVL::get_ordered_values(std::vector<int>& buffer){
+template<typename T>
+void AVL<T>::get_ordered_values(std::vector<T>& buffer){
     _order_values(head, buffer);
 }
 
-void AVL::_order_values(Node* head, std::vector<int>& buffer) {
+template<typename T>
+void AVL<T>::_order_values(Node* head, std::vector<T>& buffer) {
     if (head != nullptr) {
         buffer.push_back(head->value);
         _order_values(head->left, buffer);
@@ -267,11 +291,13 @@ void AVL::_order_values(Node* head, std::vector<int>& buffer) {
     }
 }
 
-void AVL::print_tree(std::string indent, bool last){
+template<typename T>
+void AVL<T>::print_tree(std::string indent, bool last){
     _print_tree(head, indent, last);
 }
 
-void AVL::_print_tree(Node* head, std::string indent, bool last) {
+template<typename T>
+void AVL<T>::_print_tree(Node* head, std::string indent, bool last) {
     
     if (head != nullptr) {
         std::cout << indent;

@@ -1,7 +1,7 @@
 #include "AVLTree.hpp"
 
-
-AVL::Node::Node(int val):  
+template<typename T>
+AVL<T>::Node::Node(T val):  
                     left(nullptr), 
                     right(nullptr),
                     height(1),

@@ -4,15 +4,15 @@
 #include "../../tasks/task1/AVLTree.hpp"
 
 
-
-int get_height(AVL::Node* node) {
+template<typename T>
+int get_height(typename AVL<T>::Node* node) {
     if (node == nullptr){ return 0; }
     return node->height;
 }
-
-bool is_avl(AVL::Node* head) {
+template<typename T>
+bool is_avl(typename AVL<T>::Node* head) {
   if (head == nullptr) return true;
-  if (abs(get_height(head->right) - get_height(head->left)) <= 1 && is_avl(head->left) && is_avl(head->right) ) return true;
+  if (abs(get_height<T>(head->right) - get_height<T>(head->left)) <= 1 && is_avl<T>(head->left) && is_avl<T>(head->right) ) return true;
   return false;
 }
 
@@ -20,7 +20,7 @@ bool is_avl(AVL::Node* head) {
 TEST(AVLTreeTest, determined) {
 
   int values[] = {1,2,3,4,5,6,7,8,9};
-  AVL determ_tree =  AVL(values, 9);
+  AVL<int> determ_tree =  AVL<int>(values, 9);
   std::vector<int> buffer = {};
   determ_tree.get_ordered_values(buffer);
   ASSERT_THAT(buffer, testing::ElementsAre(4,2,1,3,6,5,8,7,9));
@@ -36,7 +36,7 @@ TEST(AVLTreeTest, searchAfterDelete) {
 
   int rand_index  = rand() % 100;
   int rand_value = values[rand_index % rand_size];
-  AVL tree =  AVL(values, rand_size);
+  AVL<int> tree =  AVL<int>(values, rand_size);
   tree.delete_node(rand_value);
   ASSERT_TRUE(tree.search_node(rand_value) == nullptr);
 }
@@ -50,7 +50,7 @@ TEST(AVLTreeTest, insertNode) {
   }
 
   int rand_value = rand() % 10000;
-  AVL tree = AVL(values, rand_size);
+  AVL<int> tree = AVL<int>(values, rand_size);
   tree.insert_node(rand_value);
   ASSERT_TRUE(tree.search_node(rand_value)->value == rand_value);
 }
@@ -58,8 +58,8 @@ TEST(AVLTreeTest, insertNode) {
 TEST(AVLTreeTest, isAVL) {
 
   int values[] = {1,2,3,4,5,6,7,8,9};
-  AVL determ_tree = AVL(values, 9);
-  ASSERT_TRUE(is_avl(determ_tree.get_head()));
+  AVL<int> determ_tree = AVL<int>(values, 9);
+  ASSERT_TRUE(is_avl<int>(determ_tree.get_head()));
 }
 
 
@@ -67,8 +67,8 @@ TEST(AVLTreeTest, copyConstructor) {
 
   int values[] = {1,2,3,4,5,6,7,8,9};
   size_t size = 9;
-  AVL determ_tree = AVL(values, size);
-  AVL tree_copy = AVL(determ_tree);
+  AVL<int> determ_tree = AVL<int>(values, size);
+  AVL<int> tree_copy = AVL<int>(determ_tree);
 
   int rand_value = values[rand() % size];
   tree_copy.delete_node(rand_value);
@@ -82,8 +82,8 @@ TEST(AVLTreeTest, copyOperator) {
 
   int values[] = {1,2,3,4,5,6,7,8,9};
   size_t size = 9;
-  AVL determ_tree = AVL(values, size);
-  AVL tree_copy = AVL();
+  AVL<int> determ_tree = AVL<int>(values, size);
+  AVL<int> tree_copy = AVL<int>();
   tree_copy = determ_tree;
 
   int rand_value = values[rand() % size];
@@ -98,8 +98,8 @@ TEST(AVLTreeTest, moveConstructor) {
 
   int values[] = {1,2,3,4,5,6,7,8,9};
   size_t size = 9;
-  AVL determ_tree = AVL(values, size);
-  AVL tree_copy = AVL(std::move(determ_tree));
+  AVL<int> determ_tree = AVL<int>(values, size);
+  AVL<int> tree_copy = AVL<int>(std::move(determ_tree));
 
   int rand_value = values[rand() % size];
 
@@ -113,8 +113,8 @@ TEST(AVLTreeTest, moveOperator) {
 
   int values[] = {1,2,3,4,5,6,7,8,9};
   size_t size = 9;
-  AVL determ_tree = AVL(values, size);
-  AVL tree_copy = AVL();
+  AVL<int> determ_tree = AVL<int>(values, size);
+  AVL<int> tree_copy = AVL<int>();
   tree_copy = std::move(determ_tree);
 
   int rand_value = values[rand() % size];
