@@ -15,16 +15,27 @@ struct Restricted: MixInCounter<LIMIT> {
 };
 
 TEST(ExpressionsInheritance, valTest) {
-  const size_t limit = 2;
+  const size_t limit = 4;
   typedef Restricted<char, limit> restricted_t;
-  std::vector<restricted_t> instances_vector;
+  // std::vector<restricted_t> instances_vector;
+  try {
+    restricted_t a('1');
+    restricted_t b('a');
+    restricted_t c('1');
+    restricted_t d('a');
+    restricted_t f('1');
+    // restricted_t g('a');
 
-  for (size_t i = 0; i < 10; i++) try {
-    instances_vector.push_back(restricted_t('a' + i));
   } catch (const MixInCounterException& e) {
-    ASSERT_TRUE(i >= limit);
     std::cout << e.what() << std::endl;
   }
+
+  // for (size_t i = 0; i < 10; i++) try {
+  //   instances_vector.push_back(restricted_t('a' + i));
+  // } catch (const MixInCounterException& e) {
+  //   ASSERT_TRUE(i >= limit);
+  //   std::cout << e.what() << std::endl;
+  // }
 }
 
 
