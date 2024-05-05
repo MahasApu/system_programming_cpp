@@ -1,8 +1,7 @@
 #pragma once
 
-#include <boost/lexical_cast.hpp>
-
 #include "Expression.hpp"
+
 
 class Val: public Expression {
     int _value;
@@ -18,7 +17,7 @@ public:
     };
 
     std::string symbolic() override {
-        return boost::lexical_cast<std::string>(_value);
+        return std::to_string(_value);
     }
 
     Expression* clone() override {

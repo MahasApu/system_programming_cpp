@@ -20,7 +20,7 @@ public:
 
     ScopedExpression& operator=(ScopedExpression other) {
         std::cout << "copy-and-swap operator called" << std::endl;
-        if (this != &other) { std::swap(pointer, other.pointer); }
+        std::swap(pointer, other.pointer); 
         return *this;
     }
 
