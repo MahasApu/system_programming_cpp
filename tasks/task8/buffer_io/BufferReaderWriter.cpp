@@ -9,22 +9,6 @@ void BufferReaderWriter::close() {
     reader_writer_->close();
 }
 
-template <typename T>
-bool BufferReaderWriter::write_(T& src) {
-    std::string str = std::to_string(src);
-    if (pos_ + str.size() > buffer_.size()) {
-        if (pos_ > 0) {
-            std::string str_buf(buffer_.begin(), buffer_.end());
-            reader_writer_->write(str_buf);
-            reader_writer_->write(str);
-        }
-        pos_ = 0;
-        return true;
-    }
-    std::memcpy(buffer_.data() + pos_, str.data(), str.size());
-    pos_ += str.size();
-    return true;
-}
 
 template <typename T>
 bool BufferReaderWriter::read_(T& src, const char* format) {
@@ -58,13 +42,24 @@ bool BufferReaderWriter::read(std::string& str) {
 }
 
 bool BufferReaderWriter::write(int& buf) {
-    write_(buf);
+    return write(buf);
 }
 
 bool BufferReaderWriter::write(char& buf) {
-    write_(buf);
+    return write(buf);
 }
 
 bool BufferReaderWriter::write(std::string& str) {
-    write_(str);
+    if (pos_ + str.size() > buffer_.size()) {
+        if (pos_ > 0) {
+            std::string str_buf(buffer_.begin(), buffer_.end());
+            reader_writer_->write(str_buf);
+            reader_writer_->write(str);
+        }
+        pos_ = 0;
+        return true;
+    }
+    std::memcpy(buffer_.data() + pos_, str.data(), str.size());
+    pos_ += str.size();
+    return true;
 }

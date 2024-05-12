@@ -1,13 +1,12 @@
 #pragma once
 
-#include "../ReaderWriter.hpp"
+#include "../../ReaderWriter.hpp"
 
-class StringReaderWriter: public ReaderWriter {
-    std::string const& str_;
-    size_t pos_;
+class FileReaderWriter: virtual public ReaderWriter {
+    FILE* file_;
 public:
-    StringReaderWriter(std::string& str) : str_(str), pos_(0) { }
-    ~StringReaderWriter() { }
+    FileReaderWriter(const std::string& filename) {file_ = std::fopen(filename.c_str(), "r+");} 
+    ~FileReaderWriter() { if (file_ != NULL) close(); }
     bool is_open() const override;
     bool eof() const override;
     void close() override;
@@ -19,4 +18,5 @@ public:
     bool write(int& buf) override;
     bool write(char& buf) override;
     bool write(std::string& str) override;
+
 };

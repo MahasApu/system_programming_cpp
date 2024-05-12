@@ -13,9 +13,6 @@ class BufferReaderWriter: public ReaderWriter {
     template <typename T>
     bool read_(T& src, const char* format);
 
-    template <typename T>
-    bool write_(T& src);
-
 
 public:
     BufferReaderWriter(ReaderWriter* rw, size_t buffer_size) :
