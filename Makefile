@@ -12,7 +12,7 @@ TEST_FLAGS := -lgtest -lgmock -pthread
 # Sources and headers
 ifeq (run,$(firstword $(MAKECMDGOALS)))
   TASK_NUMBER := $(word 2, $(MAKECMDGOALS))
-  SOURCES = $(wildcard tasks/$(TASK_NUMBER)/*.cpp) $(wildcard tasks/$(TASK_NUMBER)/*/*.cpp)
+  SOURCES = $(wildcard tasks/$(TASK_NUMBER)/*.cpp tasks/$(TASK_NUMBER)/*/*.cpp tasks/$(TASK_NUMBER)/*/*/*.cpp) 
   HEADERS = $(wildcard tasks/$(TASK_NUMBER)/*.hpp)
   TESTS = $(wildcard tests/$(TASK_NUMBER)/*.cpp)
   $(eval $(TASK_NUMBER):;@:)
