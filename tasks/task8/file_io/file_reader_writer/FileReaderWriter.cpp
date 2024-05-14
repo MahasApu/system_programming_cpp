@@ -8,46 +8,46 @@ void FileReaderWriter::close() {
      file_ = NULL;
 }
 
-bool FileReaderWriter::read(std::string& str) {
+bool FileReaderWriter::read(std::string& src) {
     char c;
-    str.clear();
-    while(read(c)) str.push_back(c);
-    return !str.empty();
+    src.clear();
+    while(read(c)) src.push_back(c);
+    return !src.empty();
 }
 
-bool FileReaderWriter::read(int& buf) {
+bool FileReaderWriter::read(int& src) {
     std::fseek(file_, read_pos_, 0);
-    if (std::fscanf(file_, "%d", &buf) != EOF) {
+    if (std::fscanf(file_, "%d", &src) != EOF) {
         read_pos_++;
         return true;
     }
     return false;
 }
 
-bool FileReaderWriter::read(char& buf) {
+bool FileReaderWriter::read(char& src) {
     std::fseek(file_, read_pos_, 0);
-    if (std::fscanf(file_, "%c", &buf) != EOF) {
+    if (std::fscanf(file_, "%c", &src) != EOF) {
         read_pos_++;
         return true;
     }
-    buf = '\0';
+    src = '\0';
     return false;
 }
 
-bool FileReaderWriter::write(int& buf) {
+bool FileReaderWriter::write(int& src) {
     std::fseek(file_, write_pos_, 0);
-    write_pos_ += std::fprintf(file_, "%d", buf);
+    write_pos_ += std::fprintf(file_, "%d", src);
     return !eof();
 }
 
-bool FileReaderWriter::write(char& buf) {
+bool FileReaderWriter::write(char& src) {
     std::fseek(file_, write_pos_, 0);
-    write_pos_ += std::fprintf(file_, "%c", buf);
+    write_pos_ += std::fprintf(file_, "%c", src);
     return !eof();
 }
 
-bool FileReaderWriter::write(std::string& str) {
+bool FileReaderWriter::write(std::string& src) {
     std::fseek(file_, write_pos_, 0);
-    write_pos_ += str.size();
-    return std::fprintf(file_, "%s", str.c_str());
+    write_pos_ += src.size();
+    return std::fprintf(file_, "%s", src.c_str());
 }

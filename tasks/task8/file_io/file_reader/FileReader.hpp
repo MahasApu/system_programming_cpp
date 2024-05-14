@@ -2,8 +2,18 @@
 #include "../../Reader.hpp"
 
 class FileReader: public Reader {
-    bool read(char& buf) override;
-    bool read(int& buf) override;
-    bool read(std::string& str) override;
+    FILE* file_;
+    size_t pos_;
+    bool opened_;
+public:
+    FileReader(const std::string& src_name) {file_ = std::fopen(src_name.c_str(), "w");} 
+    ~FileReader() { if (file_ != NULL) close(); }
+    bool is_open() const override;
+    bool eof() const override;
+    void close() override;
+
+    bool read(char& src) override;
+    bool read(int& src) override;
+    bool read(std::string& src) override;
 
 };
