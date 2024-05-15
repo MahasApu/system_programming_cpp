@@ -23,6 +23,7 @@ TEST(SquareMatrix, moveConstructor) {
     SquareMatrix m2 = std::move(m1);
     ASSERT_TRUE((double)m1 == 0);
     ASSERT_TRUE((double)m2 == 3);
+
 }
 
 
