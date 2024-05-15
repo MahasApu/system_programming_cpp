@@ -18,12 +18,13 @@ bool BufferStringReaderWriter::upload_from_src() {
     if (!opened) return false;
     buffer_read.clear();
     read_pos_ = 0;
+    auto src_changed = [&pos_ = pos_, &str_ = str_](){ return pos_ != str_.size(); };
     for(size_t i = 0; i < buffer_size; i++) {
-        if (pos_ == str_.size()) upload_to_src(); // load data from write buffer
-        if (pos_ == str_.size()) break ;          // if nothing happend - break
+        if (!src_changed()) upload_to_src(); // load data from write buffer
+        if (!src_changed()) break ;          // if nothing happend - break
         buffer_read.push_back(str_.at(pos_++));
     }
-    if (pos_ != str_.size() && buffer_read.empty()) { return false;}
+    if (src_changed() && buffer_read.empty()) { return false;}
     return true;
 }
 
@@ -31,7 +32,9 @@ bool BufferStringReaderWriter::is_open() const { return opened; }
 bool BufferStringReaderWriter::eof() const { return false; }
 void BufferStringReaderWriter::close() {
     if (opened) {
-        if (!upload_to_src()) {std::cout << "close: Unable to write data from buffer!" << std::endl; return;}
+        if (!upload_to_src()) {
+            std::cout << "close: Unable to write data from buffer!" << std::endl;
+            return;}
         opened = false;
     }
 }
@@ -78,7 +81,10 @@ bool BufferStringReaderWriter::write(char& src) {
     buffer_write.push_back(src);
     write_pos_++;
     if (write_pos_ == buffer_size) {
-        if (!upload_to_src()){ std::cout << "write_char: Unable to read data from buffer!" << std::endl; return false;}
+        if (!upload_to_src()) { 
+            std::cout << "write_char: Unable to read data from buffer!" << std::endl;
+            return false;
+        }
     }
     return true;
 

@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <vector>
-#include <string>
 
 #include "../ReaderWriter.hpp"
 
@@ -13,8 +12,6 @@ protected:
     std::vector<char> buffer_write;
     std::vector<char> buffer_read;
     size_t buffer_size;
-    bool buffer_r_end = false;
-    bool buffer_w_end = false;
 
     BufferReaderWriter(size_t buffer_size):
                                 opened(true),
