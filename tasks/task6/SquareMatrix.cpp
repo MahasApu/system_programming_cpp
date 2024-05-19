@@ -1,5 +1,4 @@
 #include "SquareMatrix.hpp"
-#include <cassert>
 #include <vector>
 
 
@@ -75,18 +74,18 @@ void print_matrix(const SquareMatrix& matrix) {
 // Returns summ of matrix elements
 SquareMatrix::operator double() const { return elements_sum_;};
 SquareMatrix::Row SquareMatrix::operator[](size_t index) {
-    if (index > size_ || index < 0) throw std::out_of_range("Index is out of range!");
+    if (index > size_ - 1 || index < 0) throw std::out_of_range("Index is out of range!");
     return Row(matrix_ + index * size_, size_);
 }
 const SquareMatrix::Row SquareMatrix::operator[](size_t index) const {
-    if (index > size_ || index < 0) throw std::out_of_range("Index is out of range!");
+    if (index > size_ - 1 || index < 0) throw std::out_of_range("Index is out of range!");
     return Row(matrix_ + index * size_, size_);
 }
 
 
 // Matrix operators
 SquareMatrix& SquareMatrix::operator=(SquareMatrix other){
-    if (other.size_ == this->size_) throw std::length_error("Sizes of matrices are not equal!");
+    if (other.size_ != this->size_) throw std::length_error("Sizes of matrices are not equal!");
     std::swap(this->matrix_, other.matrix_);
     std::swap(elements_sum_, other.elements_sum_);
     std::swap(size_, other.size_);

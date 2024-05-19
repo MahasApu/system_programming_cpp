@@ -40,19 +40,16 @@ public:
         size_t row_size;
         
     public:
-        Row(double* row, size_t size): row_(row), row_size(size) {                      
-            // for (size_t i = 0; i < row_size; i++) std::cout << row_[i];
-            // std::cout << " " << std::endl;
-        }
+        Row(double* row, size_t size): row_(row), row_size(size) { }
 
         // for double indexing
         double& operator[](size_t index) {
-            if (index > row_size || index < 0) throw std::out_of_range("Incorrect index for double indexing!");
+            if (index > row_size - 1 || index < 0) throw std::out_of_range("Incorrect index for double indexing!");
             return row_[index];
         }
 
         const double& operator[](size_t index) const {
-            if (index > row_size || index < 0) throw std::out_of_range("Incorrect index for double indexing!");
+            if (index > row_size - 1 || index < 0) throw std::out_of_range("Incorrect index for double indexing!");
             return row_[index];
         }
 
