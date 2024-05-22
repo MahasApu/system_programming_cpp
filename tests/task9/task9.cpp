@@ -110,7 +110,7 @@ TEST(AVLTreeTest, moveConstructor) {
 }
 
 
-TEST(AVLTreeTest, moveOperator) {
+TEST(AVLTreeTest, tst) {
 
   int values[] = {1,2,3,4,5,6,7,8,9};
   size_t size = 9;
@@ -122,6 +122,33 @@ TEST(AVLTreeTest, moveOperator) {
 
   ASSERT_TRUE(tree_copy.search_node(rand_value) != nullptr);
   ASSERT_TRUE(determ_tree.get_head() == nullptr);
+}
+
+TEST(AVLTreeTest, moveOperator) {
+
+  char values[] = {'C', 'D', 'F'};
+  size_t size = 3;
+  AVL<char> determ_tree = AVL<char>(values, size);
+  AVL<char> tree_copy = AVL<char>();
+  tree_copy = std::move(determ_tree);
+
+  char rand_value = values[rand() % size];
+
+  ASSERT_TRUE(tree_copy.search_node(rand_value) != nullptr);
+}
+
+
+TEST(AVLTreeTest, e) {
+
+  std::string values[] = {"sfggd", "hdhd", "hdhdh"};
+  size_t size = 3;
+  AVL<std::string> determ_tree = AVL<std::string>(values, size);
+  AVL<std::string> tree_copy = AVL<std::string>();
+  tree_copy = std::move(determ_tree);
+
+  std::string rand_value = values[rand() % size];
+
+  ASSERT_TRUE(tree_copy.search_node(rand_value) != nullptr);
 }
 
 int main(int argc, char **argv) {
