@@ -1,10 +1,34 @@
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
 #include "../../tasks/task15/Container.hpp"
 
-struct Point;
+struct Point {
+    int x, y;
+    Point(int x, int y): x(x), y(y) { }
+    Point(const Point& other): x(other.x), y(other.y) { };
+    Point& operator=(const Point& other) {
+        x = other.x;
+        y = other.y;
+        return *this;
+    };
+    friend std::ostream& operator<<(std::ostream& o, const Point& other) {
+        o << other.x << " " << other.y;
+        return o;
+    }   
+    ~Point() {};
+};
 
-int main() {
+TEST(Container, getElement) {
+    
     Container<int, char, Point> c(12, 'c', Point{2 ,3});
-    std::cout << c.getElement<int>(0) << std::endl;
-    std::cout << c.getElement<char>(1) << std::endl;
-    std::cout << c.getElement<Point>(2) << std::endl;
+    ASSERT_TRUE(c.getElement<int>(0) == 12);
+    ASSERT_TRUE(c.getElement<char>(1) == 'c');
+    ASSERT_TRUE(c.getElement<Point>(2).x == 2);
+    ASSERT_TRUE(c.getElement<Point>(2).y == 3);
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

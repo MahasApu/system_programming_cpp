@@ -1,28 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include <malloc.h>
 
 #include "../task14/TinyAllocator.hpp"
-
-struct Point {
-    int x, y;
-    Point(int x_, int y_): x(x_), y(y_) { }
-    Point(const Point& other): x(other.x), y(other.y) { };
-    Point& operator=(const Point& other) {
-        x = other.x;
-        y = other.y;
-        return *this;
-    };
-
-    friend std::ostream& operator<<(std::ostream& o, const Point& other) {
-        o << other.x;
-        o << " ";
-        return o;
-    }
-    
-    ~Point() {};
-};
 
 
 template<typename... Types>
