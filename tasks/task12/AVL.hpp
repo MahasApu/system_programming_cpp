@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <string>
 #include <vector>
 
 template<typename T>
@@ -16,12 +15,14 @@ public:
     struct Node {
         Node* left;
         Node* right;
+        Node* parent;
         int height;
         int rank;
         T value;
-        Node(T val):  
+        Node(T val, Node* parent):  
                     left(nullptr), 
                     right(nullptr),
+                    parent(parent),
                     height(1),
                     rank(0),
                     value(val) { }
@@ -29,12 +30,8 @@ public:
 
     class Iterator {
         Node* curr_;
-        std::vector<Node*> stack;
     public:
-        Iterator(Node* ptr) {
-            push_node_trace(ptr); 
-            curr_ = has_next() ? next() : nullptr;
-        }
+        Iterator(Node* ptr): curr_(ptr) { }
         Iterator(const Iterator& other);
         Iterator& operator=(const Iterator& other);
         ~Iterator() { }
@@ -44,17 +41,17 @@ public:
         Node* operator->();
         Iterator& operator++();
         Iterator operator++(int);
-        friend bool operator==(const Iterator& first, const Iterator& second) { return first.curr_ == second.curr_; }
-        friend bool operator!=(const typename AVL<T>::Iterator& first, const AVL<T>::Iterator& second) { return !(first == second); }
-    private:
-        void push_node_trace(Node* node);
-        bool has_next();
-        Node* next();
+        friend bool operator==(const Iterator& first, const Iterator& second) {
+            return first.curr_ == second.curr_;
+        };
+        friend bool operator!=(const Iterator& first, const Iterator& second) {
+            return !(first == second);
+        }
     };
 
-    Iterator begin() { return Iterator(head); }
+    Iterator begin() { return Iterator(get_min( head)); }
     Iterator end() { return Iterator(nullptr); }
-    
+
     Node* search_node(T value);
     void insert_node(T value);
     void delete_node(T value);
@@ -68,7 +65,7 @@ public:
 private:
     Node* head;
     int size;
-    
+
     void copyAVL(Node* node);
     void destructAVL(Node*& node);
     static int get_height(Node* node);
@@ -82,7 +79,7 @@ private:
     static Node* left_rotation(Node* node);
     static Node* right_rotation(Node* node);
     static Node* _search(Node* node, T value);
-    Node* _insert(Node* node, T new_value);
+    Node* _insert(Node* node, T new_value, Node* parent);
     Node* _delete(Node* node, T old_value);
 
 
@@ -91,37 +88,15 @@ private:
 // Iterator methods implementation
 
 template <typename T>
-AVL<T>::Iterator::Iterator(const Iterator& other) { curr_ = other.curr_; stack = other.stack;}
+AVL<T>::Iterator::Iterator(const Iterator& other) { curr_ = other.curr_; }
 
 template <typename T>
 typename AVL<T>::Iterator& AVL<T>::Iterator::operator=(const AVL<T>::Iterator& other) {
-    stack = other.stack;
     curr_ = other.curr_;
     return *this;
 }
 
-template <typename T>
-void AVL<T>::Iterator::push_node_trace(Node* node) {
-    if (node) {
-        stack.push_back(node);
-        push_node_trace(node->left);
-    }
-}
-
-template <typename T>
-bool AVL<T>::Iterator::has_next() { return !stack.empty(); }
-
-template <typename T>
-typename AVL<T>::Node* AVL<T>::Iterator::next() {
-    if (!has_next()) return nullptr;
-    Node* curr = stack.back();
-    stack.pop_back();
-    if (curr->right) push_node_trace(curr->right);
-    return curr;
-}
-
 // Iterator's operators
-
 template <typename T>
 typename AVL<T>::Node& AVL<T>::Iterator::operator*() { return *curr_; }
 
@@ -130,7 +105,18 @@ typename AVL<T>::Node* AVL<T>::Iterator::operator->() { return curr_; }
 
 template <typename T>
 typename AVL<T>::Iterator& AVL<T>::Iterator::operator++() {
-    curr_ = next();
+    Node* parent;
+    if (curr_->right) {
+        curr_ = curr_->right;
+        while (curr_->left) curr_ = curr_->left;
+    } else {
+        parent = curr_->parent;
+        while (parent && curr_ == parent->right) {
+            curr_ = parent;
+            parent = parent->parent;
+        }
+        curr_ = parent;
+    }
     return *this;
 }
 
@@ -140,6 +126,18 @@ typename AVL<T>::Iterator AVL<T>::Iterator::operator++(int) {
     ++(*this);
     return tmp;
 }
+
+// TODO: define how to make it work!
+
+// template <typename T>
+// bool operator==(const typename AVL<T>::Iterator& first, const typename AVL<T>::Iterator& second) {
+//     return first.curr_ == second.curr_;
+// }
+
+// template <typename T>
+// bool operator!=(const typename AVL<T>::Iterator& first, const typename AVL<T>::Iterator& second) {
+//     return !(first == second);
+// }
 
 
 // AVLTree structure methods implementation
@@ -257,10 +255,14 @@ typename AVL<T>::Node* AVL<T>::left_rotation(AVL<T>::Node* node){
     node->right = tmp;
 
     int val = -1;
-    
+
     if (tmp != nullptr) {
         val = tmp->rank;
+        tmp->parent = node;
     }
+
+    r_node->parent = node->parent;
+    node->parent = r_node;
 
     node->height = 1 + max(get_height(node->left), get_height(node->right));
     r_node->height = 1 + max(get_height(r_node->left), get_height(r_node->right));
@@ -283,14 +285,18 @@ typename AVL<T>::Node* AVL<T>::right_rotation(AVL<T>::Node* node){
     node->left = tmp;
 
     int val = -1;
-    
+
     if (tmp != nullptr) {
         val = tmp->rank;
+        tmp->parent = node;
     }
+
+    l_node->parent = node->parent;
+    node->parent = l_node;
 
     node->height = 1 + max(get_height(node->left), get_height(node->right));
     l_node->height = 1 + max(get_height(l_node->left), get_height(l_node->right));
-    
+
 
     node->rank = node->rank - (l_node->rank + 1) + (val + 1);
     l_node->rank = l_node->rank - (val + 1) + (node->rank + 1);
@@ -335,24 +341,24 @@ typename AVL<T>::Node* AVL<T>::_search(AVL<T>::Node* node, T value) {
 }
 
 template<typename T>
-typename AVL<T>::Node* AVL<T>::_insert(AVL<T>::Node* node, T new_value) {
+typename AVL<T>::Node* AVL<T>::_insert(AVL<T>::Node* node, T new_value, Node* parent) {
     if (node == nullptr) {
         size++;
-        return new Node(new_value);
+        return new Node(new_value, parent);
     } else {
         switch (comparator_value(node, new_value)) {
             case 1:
-                node->left = _insert(node->left, new_value);
+                node->left = _insert(node->left, new_value, node);
                 break;
             case -1:
-                node->right = _insert(node->right, new_value);
+                node->right = _insert(node->right, new_value, node);
                 break;
         }
         node->rank += 1;
     }
 
     node->height = 1 + max(get_height(node->left), get_height(node->right));
-    
+
     switch (comparator_balance(node)) {
         case 1:
             if (new_value > node->left->value) { node->left = left_rotation(node->left); }
@@ -370,7 +376,7 @@ typename AVL<T>::Node* AVL<T>::_insert(AVL<T>::Node* node, T new_value) {
 
 template<typename T>
 void AVL<T>::insert_node(T value) {
-    this->head = _insert(this->head, value);
+    this->head = _insert(this->head, value, this->head);
 }
 
 template<typename T>
@@ -410,7 +416,7 @@ typename AVL<T>::Node* AVL<T>::_delete(AVL<T>::Node* node, T old_value){
     }
 
     node->height = 1 + max(get_height(node->left), get_height(node->right));
-    
+
     switch (get_balance(node)) {
         case 1:
             if (get_balance(node->left) < 0) node->left = left_rotation(node->left);
@@ -451,7 +457,7 @@ void AVL<T>::print_tree(std::string indent, bool last){
 
 template<typename T>
 void AVL<T>::_print_tree(AVL<T>::Node* head, std::string indent, bool last) {
-    
+
     if (head != nullptr) {
         std::cout << indent;
         if (last) {
