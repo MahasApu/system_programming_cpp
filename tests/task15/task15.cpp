@@ -1,9 +1,6 @@
 #include "../../tasks/task15/Container.hpp"
 
-struct Point {
-    int x, y;
-    Point(int x, int y): x(x), y(y) { }
-};
+struct Point;
 
 int main() {
     Container<int, char, Point> c(12, 'c', Point{2 ,3});

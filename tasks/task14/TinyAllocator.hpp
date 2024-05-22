@@ -12,18 +12,15 @@ template <typename... Args>
 constexpr size_t get_size = sizeof...(Args) == 0 ? 0 : (sizeof(Args) + ...);
 
 template <typename T>
-constexpr char* tiny_allocator(char* ptr, T arg) {
+constexpr char* tiny_allocator(char* ptr, T&& arg) {
     ::new(ptr) T(arg);
     ptr += sizeof(T);
     return ptr;
 }
 
 template <size_t SIZE, typename... Types>
-void allocate(void* memory, Types... args) {
-    
-    static_assert(is_copy_constructible<Types...>, "NOT COPY CONSTRUCTIBLE");
-    static_assert(is_enough_memory<SIZE, get_size<Types...>>, "NO FREE MEMORY");
-
+void allocate(void* memory, Types&&... args) requires (is_copy_constructible<Types...>,
+                                                       is_enough_memory<SIZE, get_size<Types...>> ) {
     auto* ptr = static_cast<char*>(memory);
-    ((ptr = tiny_allocator(ptr, args)), ...);
+    ((ptr = tiny_allocator(ptr, std::forward(args))), ...);
 }
