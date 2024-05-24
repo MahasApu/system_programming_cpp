@@ -11,6 +11,7 @@
 
 class IO {
 public:
+    bool opened;
     virtual ~IO() {}
     virtual bool is_open() const = 0;
     virtual bool eof() const = 0;
