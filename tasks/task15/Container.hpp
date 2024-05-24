@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 #include "../task14/TinyAllocator.hpp"
 
 
@@ -16,18 +14,26 @@ public:
         size_t shift = 0;
         size_t counter = 0;
 
-        auto init_shift = [&]<typename T>(T arg) {
+        auto init_shift = [&]<typename T>(T&& arg) {
             shifts[counter++] = shift;
             shift += sizeof(T);
         };
-
         ((init_shift(args)), ...);
     }
-
-    ~Container() {}
     
     template<typename T>
-    T getElement(size_t idx) {
+    void free_mem(auto& counter) {
+        (*((T*) ( memory + shifts[counter++]))).~T();
+    }
+
+    ~Container() {
+        std::cout << "Container destructor was called" << std::endl;
+        size_t counter = 0;
+        ((free_mem<Types>(counter)), ...);
+    }
+    
+    template<typename T>
+    T& getElement(size_t idx) {
         return *((T*) (memory + shifts[idx]));   
     }
 };

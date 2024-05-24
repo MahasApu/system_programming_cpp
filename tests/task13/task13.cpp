@@ -14,24 +14,26 @@ TEST(GetFirstIndex, Found) {
 
 struct Point {
     int x, y;
-    Point(int x_, int y_): x(x_), y(y_) { }
-    Point(const Point& other): x(other.x), y(other.y) { };
-    Point(const Point&& other): x(other.x), y(other.y) {
-      std::cout << "move cstr was called" << std::endl;
-    };
-    Point& operator=(Point other) {
-        std::swap(x, other.x);
-        std::swap(y, other.y);
+    Point(int x, int y): x(x), y(y) { std::cout << "Default costructor was called" << std::endl; }
+    Point(const Point& other): x(other.x), y(other.y) { std::cout << "Copy costructor was called" << std::endl; };
+    Point(const Point&& other): x(other.x), y(other.y) { std::cout << "Move costructor was called" << std::endl; };
+    Point& operator=(const Point& other) {
+        std::cout << "Assignment operator was called" << std::endl;
+        x = other.x;
+        y = other.y;
         return *this;
     };
 
+    Point& operator+( const Point& other) {
+      x += other.x;
+      y += other.y;
+      return *this;
+    }  
     friend std::ostream& operator<<(std::ostream& o, const Point& other) {
-        o << other.x;
-        o << " ";
+        o << other.x << " " << other.y;
         return o;
-    }
-    
-    ~Point() {};
+    }   
+    ~Point() { std::cout << "destructor was called" << std::endl;};
 };
 
 TEST(GetFirstIndex, NotFound) {
@@ -46,7 +48,7 @@ TEST(GetFirstIndex, forStruct) {
   // take by val
   // pass all args as rval
   // move cstr should be called
-  auto actual = getIndexOfTheFirstMatch([](Point p){ return p.x == 0; }, Point{1,2}, Point{4,8}, Point{0,1});
+  auto actual = getIndexOfTheFirstMatch([](Point p){ return p.x == 0; }, std::move(Point{1,2}), std::move(Point{4,8}), std::move(Point{0,1}));
   ASSERT_TRUE(actual == 2);
 }
 

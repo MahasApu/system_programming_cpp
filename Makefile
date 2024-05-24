@@ -21,7 +21,7 @@ endif
 
 # Run tests
 run:
-	$(CXX) $(SOURCES) $(TESTS) $(STD) $(TEST_FLAGS) $(SAN)
+	$(CXX) $(SOURCES) $(TESTS) $(STD) $(TEST_FLAGS)
 	./a.out
 	rm ./a.out
 
