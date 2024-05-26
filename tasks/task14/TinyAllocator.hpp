@@ -13,7 +13,8 @@ constexpr size_t get_size = sizeof...(Args) == 0 ? 0 : (sizeof(Args) + ...);
 
 template <typename T>
 constexpr char* tiny_allocator(char* ptr, T&& arg) {
-    ::new(ptr) T(arg);
+    using T_WITHOUT_REF = typename std::remove_reference<T>::type;
+    ::new(ptr) T_WITHOUT_REF(std::forward<T>(arg));
     ptr += sizeof(T);
     return ptr;
 }

@@ -48,7 +48,7 @@ TEST(GetFirstIndex, forStruct) {
   // take by val
   // pass all args as rval
   // move cstr should be called
-  auto actual = getIndexOfTheFirstMatch([](Point p){ return p.x == 0; }, std::move(Point{1,2}), std::move(Point{4,8}), std::move(Point{0,1}));
+  auto actual = getIndexOfTheFirstMatch([](Point p){ return p.x == 0; }, Point{1,2}, Point{4,8}, Point{0,1});
   ASSERT_TRUE(actual == 2);
 }
 

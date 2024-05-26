@@ -7,7 +7,7 @@ struct Point {
     int x, y;
     Point(int x, int y): x(x), y(y) { }
     Point(const Point& other): x(other.x), y(other.y) { std::cout << "Copy costructor was called" << std::endl; };
-    Point(const Point&& other): x(other.x), y(other.y) { std::cout << "Move costructor was called" << std::endl; };
+    Point(Point&& other): x(other.x), y(other.y) { std::cout << "Move costructor was called" << std::endl; };
     Point& operator=(const Point& other) {
         std::cout << "Assignment operator was called" << std::endl;
         x = other.x;
@@ -23,7 +23,7 @@ struct Point {
 };
 
 TEST(Container, getElement) {
-    Container<int, char, Point> c(12, 'c', std::move(Point{2 ,3}));
+    Container<int, char, Point> c(12, 'c', Point{2 ,3});
     ASSERT_TRUE(c.getElement<int>(0) == 12);
     ASSERT_TRUE(c.getElement<char>(1) == 'c');
     ASSERT_TRUE(c.getElement<Point>(2).x == 2);
